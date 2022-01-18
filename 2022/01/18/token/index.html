@@ -20,30 +20,36 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="记录美好生活">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Reesego">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="生成解析token如今有很多将身份验证内置到API中的方法 -JSON Web令牌只是其中之一。JSON Web令牌（JWT）作为令牌系统而不是在每次请求时都发送用户名和密码，因此比其他方法（如基本身份验证）具有固有的优势。要了解更多信息，请直接进入jwt.io上的介绍，然后再直接学习。 以下是JWT的实际应用示例。主要有两个部分：提供用户名和密码以获取令牌；并根据请求检查该令牌。 在此示例中，我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swag及其使用">
+<meta property="og:url" content="http://example.com/2022/01/18/token/index.html">
 <meta property="og:site_name" content="Reesego">
-<meta property="og:description" content="记录美好生活">
+<meta property="og:description" content="生成解析token如今有很多将身份验证内置到API中的方法 -JSON Web令牌只是其中之一。JSON Web令牌（JWT）作为令牌系统而不是在每次请求时都发送用户名和密码，因此比其他方法（如基本身份验证）具有固有的优势。要了解更多信息，请直接进入jwt.io上的介绍，然后再直接学习。 以下是JWT的实际应用示例。主要有两个部分：提供用户名和密码以获取令牌；并根据请求检查该令牌。 在此示例中，我">
 <meta property="og:locale">
+<meta property="article:published_time" content="2022-01-18T04:53:00.000Z">
+<meta property="article:modified_time" content="2022-01-18T04:55:08.037Z">
 <meta property="article:author" content="rosy">
+<meta property="article:tag" content="token">
+<meta property="article:tag" content="go">
+<meta property="article:tag" content="JWT">
+<meta property="article:tag" content="gin">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2022/01/18/token/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-Hans'
   };
 </script>
 
-  <title>Reesego</title>
+  <title>Swag及其使用 | Reesego</title>
   
 
 
@@ -142,9 +148,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
@@ -160,10 +167,9 @@
       <meta itemprop="name" content="Reesego">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/18/token/" class="post-title-link" itemprop="url">Swag及其使用</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          Swag及其使用
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -200,7 +206,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="生成解析token"><a href="#生成解析token" class="headerlink" title="生成解析token"></a>生成解析token</h1><p>如今有很多将身份验证内置到API中的方法 -JSON Web令牌只是其中之一。JSON Web令牌（JWT）作为令牌系统而不是在每次请求时都发送用户名和密码，因此比其他方法（如基本身份验证）具有固有的优势。要了解更多信息，请直接进入jwt.io上的介绍，然后再直接学习。</p>
+        <h1 id="生成解析token"><a href="#生成解析token" class="headerlink" title="生成解析token"></a>生成解析token</h1><p>如今有很多将身份验证内置到API中的方法 -JSON Web令牌只是其中之一。JSON Web令牌（JWT）作为令牌系统而不是在每次请求时都发送用户名和密码，因此比其他方法（如基本身份验证）具有固有的优势。要了解更多信息，请直接进入jwt.io上的介绍，然后再直接学习。</p>
 <p>以下是JWT的实际应用示例。主要有两个部分：提供用户名和密码以获取令牌；并根据请求检查该令牌。</p>
 <p>在此示例中，我们使用了两个库，即Go中的JWT实现以及将其用作中间件的方式。</p>
 <p>最后，在使用此代码之前，您需要将APP_KEY常量更改为机密（理想情况下，该常量将存储在代码库外部），并改进用户名/密码检查中的内容，TokenHandler以检查不仅仅是myusername/ mypassword组合。</p>
@@ -208,129 +214,36 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;net/http&quot;</span></span><br><span class="line">    <span class="string">&quot;time&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="string">&quot;github.com/dgrijalva/jwt-go&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//自定义一个字符串</span></span><br><span class="line"><span class="keyword">var</span> jwtkey = []<span class="keyword">byte</span>(<span class="string">&quot;www.topgoer.com&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Claims <span class="keyword">struct</span> &#123;</span><br><span class="line">    UserId <span class="keyword">uint</span></span><br><span class="line">    jwt.StandardClaims</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    r := gin.Default()</span><br><span class="line">    r.GET(<span class="string">&quot;/set&quot;</span>, setting)</span><br><span class="line">    r.GET(<span class="string">&quot;/get&quot;</span>, getting)</span><br><span class="line">    <span class="comment">//监听端口默认为8080</span></span><br><span class="line">    r.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//颁发token</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">setting</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">    expireTime := time.Now().Add(<span class="number">7</span> * <span class="number">24</span> * time.Hour)</span><br><span class="line">    claims := &amp;Claims&#123;</span><br><span class="line">        UserId: <span class="number">2</span>,</span><br><span class="line">        StandardClaims: jwt.StandardClaims&#123;</span><br><span class="line">            ExpiresAt: expireTime.Unix(), <span class="comment">//过期时间</span></span><br><span class="line">            IssuedAt:  time.Now().Unix(),</span><br><span class="line">            Issuer:    <span class="string">&quot;127.0.0.1&quot;</span>,  <span class="comment">// 签名颁发者</span></span><br><span class="line">            Subject:   <span class="string">&quot;user token&quot;</span>, <span class="comment">//签名主题</span></span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)</span><br><span class="line">    <span class="comment">// fmt.Println(token)</span></span><br><span class="line">    tokenString, err := token.SignedString(jwtkey)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(err)</span><br><span class="line">    &#125;</span><br><span class="line">    str = tokenString</span><br><span class="line">    ctx.JSON(<span class="number">200</span>, gin.H&#123;<span class="string">&quot;token&quot;</span>: tokenString&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//解析token</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getting</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">    tokenString := ctx.GetHeader(<span class="string">&quot;Authorization&quot;</span>)</span><br><span class="line">    <span class="comment">//vcalidate token formate</span></span><br><span class="line">    <span class="keyword">if</span> tokenString == <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        ctx.JSON(http.StatusUnauthorized, gin.H&#123;<span class="string">&quot;code&quot;</span>: <span class="number">401</span>, <span class="string">&quot;msg&quot;</span>: <span class="string">&quot;权限不足&quot;</span>&#125;)</span><br><span class="line">        ctx.Abort()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    token, claims, err := ParseToken(tokenString)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> || !token.Valid &#123;</span><br><span class="line">        ctx.JSON(http.StatusUnauthorized, gin.H&#123;<span class="string">&quot;code&quot;</span>: <span class="number">401</span>, <span class="string">&quot;msg&quot;</span>: <span class="string">&quot;权限不足&quot;</span>&#125;)</span><br><span class="line">        ctx.Abort()</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(<span class="number">111</span>)</span><br><span class="line">    fmt.Println(claims.UserId)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ParseToken</span><span class="params">(tokenString <span class="keyword">string</span>)</span> <span class="params">(*jwt.Token, *Claims, error)</span></span> &#123;</span><br><span class="line">    Claims := &amp;Claims&#123;&#125;</span><br><span class="line">    token, err := jwt.ParseWithClaims(tokenString, Claims, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span> <span class="params">(i <span class="keyword">interface</span>&#123;&#125;, err error)</span></span> &#123;</span><br><span class="line">        <span class="keyword">return</span> jwtkey, <span class="literal">nil</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">return</span> token, Claims, err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/token/" rel="tag"># token</a>
+              <a href="/tags/go/" rel="tag"># go</a>
+              <a href="/tags/JWT/" rel="tag"># JWT</a>
+              <a href="/tags/gin/" rel="tag"># gin</a>
+          </div>
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/18/swag/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="rosy">
-      <meta itemprop="description" content="记录美好生活">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Reesego">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/01/18/swag/" class="post-title-link" itemprop="url">Swag及其使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-01-18 11:17:37 / Modified: 11:38:13" itemprop="dateCreated datePublished" datetime="2022-01-18T11:17:37+08:00">2022-01-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/go/%E6%A1%86%E6%9E%B6%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index"><span itemprop="name">框架工具</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>下面以gin-swagger为例，说明swaggo的用法。</p>
-<p>安装swag命令行<br>要使用swaggo，首先要下载一个swag命令行。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/swaggo/swag/cmd/swag</span><br></pre></td></tr></table></figure>
-
-<p>在$ GOPATH / bin /下会看到多了一个swag。把$ GOPATH / bin /加到PATH后，就可以直接用swag命令行了。</p>
-<p>在包含main.go的Go工程的根目录下执行swag init，swag会检索当前工程里的swag注解（类似上述Java中的注解），生成docs.go以及swagger.json/yaml。</p>
-<p>获取gin专用的gin-swagger<br>里面包含了一个示例代码。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger</span><br><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger/swaggerFiles</span><br></pre></td></tr></table></figure>
+        
 
 
-<p>编写gin-swagger需要的注释<br>接下来就是编写注释了。注释分为两部分，一是整体应用的说明，二是具体api的说明。</p>
-<p>整体应用的说明<br>在主入口main.go中增加：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span> <span class="comment">// gin-swagger middleware</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span> <span class="comment">// swagger embed files</span></span><br></pre></td></tr></table></figure>
-
-
-<p>以及针对该应用程序的api说明。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span><span class="string">`)</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>_ &quot;github.com/swaggo/gin-swagger/example/docs&quot;
-</code></pre>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @title Swagger Example API</span></span><br><span class="line"><span class="comment">// @version 0.0.1</span></span><br><span class="line"><span class="comment">// @description  This is a sample server Petstore server.</span></span><br><span class="line"><span class="comment">// @BasePath /api/v1/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := gin.New()</span><br><span class="line">	r.GET(<span class="string">&quot;/swagger/*any&quot;</span>, ginSwagger.WrapHandler(swaggerFiles.Handler))</span><br><span class="line">	r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>请注意@BasePath。 ？swagger注释中说明的@BasePath，，@Router而不是gin代码中声明的路径（没那么智能）。</p>
-<p>具体api的说明</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// @Summary Add a new pet to the store</span></span><br><span class="line"><span class="comment">// @Description get string by ID</span></span><br><span class="line"><span class="comment">// @Accept  json</span></span><br><span class="line"><span class="comment">// @Produce  json</span></span><br><span class="line"><span class="comment">// @Param   some_id     path    int     true        &quot;Some ID&quot;</span></span><br><span class="line"><span class="comment">// @Success 200 &#123;string&#125; string	&quot;ok&quot;</span></span><br><span class="line"><span class="comment">// @Failure 400 &#123;object&#125; web.APIError &quot;We need ID!!&quot;</span></span><br><span class="line"><span class="comment">// @Failure 404 &#123;object&#125; web.APIError &quot;Can not find ID&quot;</span></span><br><span class="line"><span class="comment">// @Router /testapi/get-string-by-int/&#123;some_id&#125; [get]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStringByInt</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	err := web.APIError&#123;&#125;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>说明下几个参数。</p>
-<p>如果不需要参数（例如，获取所有类型的，由url就齐活了），则不需要加@Param。参数可以是int或字符串类型。这里的定义会影响swagger ui发送的请求，如果定义错了会导致发送请求的数据不对，例如对数字进行了转义。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// @Param group body model.SwagGroupAdd true &quot;Add group&quot;</span></span><br><span class="line"><span class="comment">// @Param name path string true &quot;Group Name&quot;</span></span><br><span class="line"><span class="comment">// @Param role query int true &quot;Role ID&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>@Success和@Failure定义了返回值，类型可以是字符串，对象，数组。按照一般的restful定义，这三个类型足够表达返回值了。</p>
-<p>GET /collection：返回资源对象的列表（数组）<br>GET /collection/resource：返回单个资源对象<br>POST /collection：返回新生成的资源对象<br>PUT /collection/resource：返回完整的资源对象<br>PATCH /collection/resource：返回完整的资源对象<br>DELETE /collection/resource：返回一个空文档<br>不过有些不太标准的restful实践会在上述返回之上再包装一个代码/消息/正文，所以对swaggo来说会造成一些新的负担，因为必须为这些返回类型单独加对应的类型。这项。</p>
-<p>swag初始化<br>在项目根目录里执行swag init，生成docs/docs.go；再执行go run main.go，访问<a target="_blank" rel="noopener" href="http://localhost:8080/swagger/index.html%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%84%89%E5%BF%AB%E7%9A%84%E4%BD%BF%E7%94%A8swagger">http://localhost:8080/swagger/index.html，就可以愉快的使用swagger</a> ui了。</p>
-<p>参考原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34857250/article/details/105122232">https://blog.csdn.net/qq_34857250/article/details/105122232</a></p>
-
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/18/swag/" rel="prev" title="Swag及其使用">
+      <i class="fa fa-chevron-left"></i> Swag及其使用
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -383,6 +296,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E8%A7%A3%E6%9E%90token"><span class="nav-number">1.</span> <span class="nav-text">生成解析token</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
