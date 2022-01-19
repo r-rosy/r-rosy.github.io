@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="当我们使用gin框架时，可以在中间件中进行跨域设置。 123456789101112131415161718192021222324252627282930313233343536373839 1 &#x2F;&#x2F; 中间件 2 func middleware() gin.HandlerFunc &amp;#123; 3     return func(c *gin.Context) &amp;#123; 4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="middleware的使用">
+<meta property="og:url" content="http://example.com/2022/01/18/middleware/index.html">
+<meta property="og:site_name" content="Reesego">
+<meta property="og:description" content="当我们使用gin框架时，可以在中间件中进行跨域设置。 123456789101112131415161718192021222324252627282930313233343536373839 1 &#x2F;&#x2F; 中间件 2 func middleware() gin.HandlerFunc &amp;#123; 3     return func(c *gin.Context) &amp;#123; 4">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-01-18T11:31:25.000Z">
+<meta property="article:modified_time" content="2022-01-18T11:37:33.759Z">
+<meta property="article:author" content="rosy">
+<meta property="article:tag" content="middleware">
+<meta property="article:tag" content="go">
+<meta property="article:tag" content="gin">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/01/18/middleware/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>middleware的使用 | Reesego</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="Reesego" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Reesego</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">rosy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/18/middleware/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="rosy">
+      <meta itemprop="description" content="记录美好生活">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Reesego">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          middleware的使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-18 19:31:25 / Modified: 19:37:33" itemprop="dateCreated datePublished" datetime="2022-01-18T19:31:25+08:00">2022-01-18</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>当我们使用gin框架时，可以在中间件中进行跨域设置。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> 1 // 中间件</span><br><span class="line"> 2 func middleware() gin.HandlerFunc &#123;</span><br><span class="line"> 3     return func(c *gin.Context) &#123;</span><br><span class="line"> 4         t := time.Now()</span><br><span class="line"> 5         c.Set(&quot;example&quot;, &quot;123456&quot;)</span><br><span class="line"> 6         // c.Next()后就执行真实的路由函数，路由执行完成之后接着走time.Since(t)</span><br><span class="line"> 7         c.Next()</span><br><span class="line"> 8 </span><br><span class="line"> 9         // 从time.Now()到目前为止过了多长时间</span><br><span class="line">10         latency := time.Since(t)</span><br><span class="line">11         log.Print(&quot;--&quot;, latency)</span><br><span class="line">12 </span><br><span class="line">13         // gin设置响应头，设置跨域</span><br><span class="line">14         c.Header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)</span><br><span class="line">15         c.Header(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, OPTIONS, PUT, DELETE&quot;)</span><br><span class="line">16         c.Header(&quot;Access-Control-Allow-Headers&quot;, &quot;Action, Module, X-PINGOTHER, Content-Type, Content-Disposition&quot;)</span><br><span class="line">17 </span><br><span class="line">18         //设置中间件的响应头，路由的响应头可以在路由返回中设置，参考/ping</span><br><span class="line">19         // c.Writer.WriteHeader(http.StatusMovedPermanently)</span><br><span class="line">20         status := c.Writer.Status()</span><br><span class="line">21         log.Println(&quot;==&quot;, status)</span><br><span class="line">22     &#125;</span><br><span class="line">23 &#125;</span><br><span class="line">24 </span><br><span class="line">25 func middle(c *gin.Context) &#123;</span><br><span class="line">26     example := c.MustGet(&quot;example&quot;).(string)</span><br><span class="line">27     log.Println(example)</span><br><span class="line">28 &#125;</span><br><span class="line">29 </span><br><span class="line">30 func main() &#123;</span><br><span class="line">31     r := gin.Default()</span><br><span class="line">32 </span><br><span class="line">33     //中间件，只有在中间件之后注册的路由才会走中间件</span><br><span class="line">34     r.Use(middleware())</span><br><span class="line">35     //http://localhost:8081/middle</span><br><span class="line">36     r.GET(&quot;/middle&quot;, middle)</span><br><span class="line">37 </span><br><span class="line">38     r.Run(&quot;:8081&quot;)</span><br><span class="line">39 &#125;</span><br></pre></td></tr></table></figure>
+
+<p>每次执行路由函数middle()之前都会执行middleware()函数，在执行到middleware函数中c.Next()时，会执行真正的路由函数middle()，路由函数执行完成之后会继续执行middleware()中c.Next()函数后面的代码。</p>
+<p>另一回答—</p>
+<p>gin框架中间件 c.Next() c.Abort() c.Set() c.Get 跨中间件取值 gin中间件中使用goroutine_可控的事情要谨慎，不可控的事情要乐观。-CSDN博客</p>
+<p>深入Gin框架内幕(一) - 知乎—参考该方法中的最后一部分内容（模拟请求）</p>
+<p>（1）示例1：</p>
+<p>package main</p>
+<p>import (<br>    “fmt”<br>    “github.com/gin-gonic/gin”<br>    “net/http”<br>    “time”<br>)</p>
+<p>// HandlerFunc<br>func indexHandler(c *gin.Context) {<br>    fmt.Println(“index”)<br>    c.JSON(http.StatusOK, gin.H{<br>        “msg”: “index”,<br>    })<br>}</p>
+<p>// 定义一个中间件<br>func m1(c *gin.Context) {<br>    fmt.Println(“m1 in …”)<br>    // 计时<br>    start := time.Now()<br>    c.Next() // 调用后续的处理函数</p>
+<pre><code>//c.Abort()      // 阻止调用后续的处理函数
+cost := time.Since(start)
+fmt.Printf(&quot;cost:%v\n&quot;, cost)
+fmt.Printf(&quot;m1 out ...&quot;)
+</code></pre>
+<p>}</p>
+<p>func m2(c *gin.Context) {<br>    fmt.Println(“m2 in …”)<br>    c.Next() // 调用后续的处理函数<br>    //c.Abort()   //阻止调用后续的处理函数，也就是m2它自己走完就行<br>    //return<br>    fmt.Println(“m2 out …”)<br>}</p>
+<p>func main() {<br>    r := gin.Default()</p>
+<pre><code>// 点GET查看源码发现
+// GET(relativepath string,handlers ...HandlerFunc) IRoutes 另外,...表示可传多个HandlerFunc类型的函数
+ 
+//r.GET(&quot;/index&quot;, m1, indexHandler)
+//r.GET(&quot;/shop&quot;, m1, func(c *gin.Context) &#123;
+//    c.JSON(http.StatusOK, gin.H&#123;
+//        &quot;msg&quot;: &quot;shop&quot;,
+//    &#125;)
+//&#125;)
+//r.GET(&quot;/user&quot;, m1, func(c *gin.Context) &#123;
+//    c.JSON(http.StatusOK, gin.H&#123;
+//        &quot;msg&quot;: &quot;user&quot;,
+//    &#125;)
+//&#125;)
+ 
+//点开use查看源码发现 Use(middleware ...HandlerFunc) IRoutes
+r.Use(m1, m2) // 全局注册中间件函数m1 m2
+ 
+/*访问/index
+执行indexHandler之前去执行注册的中间件,总的执行打印顺序是:m1 in -&gt; m2 in -&gt; index -&gt; m2 out -&gt; m1 out
+*/
+r.GET(&quot;/index&quot;, indexHandler)
+r.GET(&quot;/shop&quot;, func(c *gin.Context) &#123;
+    c.JSON(http.StatusOK, gin.H&#123;
+        &quot;msg&quot;: &quot;shop&quot;,
+    &#125;)
+&#125;)
+r.GET(&quot;/user&quot;, func(c *gin.Context) &#123;
+    c.JSON(http.StatusOK, gin.H&#123;
+        &quot;msg&quot;: &quot;user&quot;,
+    &#125;)
+&#125;)
+ 
+r.Run(&quot;:9090&quot;)
+</code></pre>
+<p>}<br>（2）示例2：</p>
+<p>package main</p>
+<p>import (<br>    “fmt”<br>    “github.com/gin-gonic/gin”<br>    “net/http”<br>    “time”<br>)</p>
+<p>// HandlerFunc<br>func indexHandler(c *gin.Context) {<br>    fmt.Println(“index”)</p>
+<pre><code>name, ok := c.Get(&quot;name&quot;) //取值实现了跨中间件取值
+if !ok &#123;
+    name = &quot;default user&quot;
+&#125;
+//fmt.Println(name)
+ 
+c.JSON(http.StatusOK, gin.H&#123;
+    &quot;msg&quot;: name,
+&#125;)
+</code></pre>
+<p>}</p>
+<p>// 定义一个中间件<br>func m1(c *gin.Context) {<br>    fmt.Println(“m1 in…”)<br>    // 计时<br>    start := time.Now()</p>
+<pre><code>// gin中间件中使用goroutine
+// 当在中间件或handler中启动新的goroutine时,不能使用原始的上下文(c *gin.Context),必须使用其只读副本(c.Copy())
+//go otherFunc(c.Copy())     // 在otherFunc中只能使用c的拷贝
+ 
+c.Next() // 调用后续的处理函数
+ 
+//c.Abort() // 阻止调用后续的处理函数
+cost := time.Since(start)
+fmt.Printf(&quot;cost:%v\n&quot;, cost)
+fmt.Printf(&quot;m1 out...&quot;)
+</code></pre>
+<p>}</p>
+<p>func m2(c *gin.Context) {<br>    fmt.Println(“m2 in…”)</p>
+<pre><code>c.Set(&quot;name&quot;, &quot;tony&quot;) // 可以在请求上下文里面设置一些值,然后其他地方取值
+ 
+c.Next() //调用后续的处理函数
+//c.Abort() // 阻止调用后续的处理函数,也就是m2它自己走完就行
+//return
+fmt.Println(&quot;m2 out...&quot;)
+</code></pre>
+<p>}</p>
+<p>// 自定义认证中间件,通过这种方式实现一些灵活的控制<br>func authMiddleware(doCheck bool) gin.HandlerFunc {<br>    // 连接数据库<br>    // 或其他一些准备工作<br>    return func(c *gin.Context) {<br>        if doCheck {<br>            // 这里存放具体的逻辑<br>            // 是否登录的判断<br>            //if 是登录的用户 {<br>            //    c.Next()<br>            //}else {<br>            //    c.Abort()<br>            //}<br>            name, ok := c.Get(“name”) //取值实现了跨中间件取值<br>            if ok {<br>                fmt.Println(name)<br>                c.Next()<br>                fmt.Println(“authMiddleware”)<br>            }<br>        } else {<br>            c.Next()<br>        }<br>    }<br>}</p>
+<p>func main() {<br>    r := gin.Default()</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 点开Use查看源码发现 Use(middleware ...HandlerFunc) IRoutes</span></span><br><span class="line">r.Use(m1, m2, authMiddleware(<span class="literal">true</span>)) <span class="comment">//全局注册中间件函数m1 m2 authMiddleware</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/*访问/index</span></span><br><span class="line"><span class="comment">执行indexHandler之前,去执行注册的中间件,总的执行打印顺序是:m1 in -&gt; m2 in -&gt; index -&gt; m2 out -&gt; m1 out</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">r.GET(<span class="string">&quot;/index&quot;</span>, indexHandler)</span><br><span class="line">r.GET(<span class="string">&quot;/shop&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">		<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;shop&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br><span class="line">r.GET(<span class="string">&quot;/user&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">		<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*路由组注册中间件方法1</span></span><br><span class="line"><span class="comment">routerGroup1 := r.Group(&quot;/xx&quot;, authMiddleware(true))</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">	routerGroup1.GET(&quot;index&quot;, func(c *gin.Context) &#123;</span></span><br><span class="line"><span class="comment">		c.JSON(http.StatusOK, gin.H&#123;</span></span><br><span class="line"><span class="comment">			&quot;msg&quot;: &quot;routerGroup1&quot;,</span></span><br><span class="line"><span class="comment">		&#125;)</span></span><br><span class="line"><span class="comment">	&#125;)</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//路由组注册中间件方法2</span></span><br><span class="line">routerGroup2 := r.Group(<span class="string">&quot;/xx2&quot;</span>)</span><br><span class="line">routerGroup2.Use(authMiddleware(<span class="literal">true</span>))</span><br><span class="line">&#123;</span><br><span class="line">	routerGroup2.GET(<span class="string">&quot;/index&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">			<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;routeGroup2&quot;</span>,</span><br><span class="line">		&#125;)</span><br><span class="line"> </span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">r.Run(<span class="string">&quot;:9090&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42303254/article/details/116136055">https://blog.csdn.net/qq_42303254/article/details/116136055</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/middleware/" rel="tag"># middleware</a>
+              <a href="/tags/go/" rel="tag"># go</a>
+              <a href="/tags/gin/" rel="tag"># gin</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/01/18/viper/" rel="prev" title="viper">
+      <i class="fa fa-chevron-left"></i> viper
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">rosy</p>
+  <div class="site-description" itemprop="description">记录美好生活</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">rosy</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
