@@ -164,7 +164,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/18/middleware/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/19/PhotoEncoding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -178,7 +178,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/18/middleware/" class="post-title-link" itemprop="url">middleware的使用</a>
+            <a href="/2022/01/19/PhotoEncoding/" class="post-title-link" itemprop="url">PhotoEncoding</a>
         </h2>
 
         <div class="post-meta">
@@ -187,23 +187,21 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2022-01-18 19:31:25" itemprop="dateCreated datePublished" datetime="2022-01-18T19:31:25+08:00">2022-01-18</time>
+              <time title="Created: 2022-01-19 20:46:29 / Modified: 20:52:11" itemprop="dateCreated datePublished" datetime="2022-01-19T20:46:29+08:00">2022-01-19</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-19 09:23:04" itemprop="dateModified" datetime="2022-01-19T09:23:04+08:00">2022-01-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/gin/" itemprop="url" rel="index"><span itemprop="name">gin</span></a>
+                  <a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/go/encoding/" itemprop="url" rel="index"><span itemprop="name">encoding</span></a>
                 </span>
             </span>
 
@@ -218,105 +216,72 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>当我们使用gin框架时，可以在中间件中进行跨域设置。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"> 1 // 中间件</span><br><span class="line"> 2 func middleware() gin.HandlerFunc &#123;</span><br><span class="line"> 3     return func(c *gin.Context) &#123;</span><br><span class="line"> 4         t := time.Now()</span><br><span class="line"> 5         c.Set(&quot;example&quot;, &quot;123456&quot;)</span><br><span class="line"> 6         // c.Next()后就执行真实的路由函数，路由执行完成之后接着走time.Since(t)</span><br><span class="line"> 7         c.Next()</span><br><span class="line"> 8 </span><br><span class="line"> 9         // 从time.Now()到目前为止过了多长时间</span><br><span class="line">10         latency := time.Since(t)</span><br><span class="line">11         log.Print(&quot;--&quot;, latency)</span><br><span class="line">12 </span><br><span class="line">13         // gin设置响应头，设置跨域</span><br><span class="line">14         c.Header(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;)</span><br><span class="line">15         c.Header(&quot;Access-Control-Allow-Methods&quot;, &quot;POST, GET, OPTIONS, PUT, DELETE&quot;)</span><br><span class="line">16         c.Header(&quot;Access-Control-Allow-Headers&quot;, &quot;Action, Module, X-PINGOTHER, Content-Type, Content-Disposition&quot;)</span><br><span class="line">17 </span><br><span class="line">18         //设置中间件的响应头，路由的响应头可以在路由返回中设置，参考/ping</span><br><span class="line">19         // c.Writer.WriteHeader(http.StatusMovedPermanently)</span><br><span class="line">20         status := c.Writer.Status()</span><br><span class="line">21         log.Println(&quot;==&quot;, status)</span><br><span class="line">22     &#125;</span><br><span class="line">23 &#125;</span><br><span class="line">24 </span><br><span class="line">25 func middle(c *gin.Context) &#123;</span><br><span class="line">26     example := c.MustGet(&quot;example&quot;).(string)</span><br><span class="line">27     log.Println(example)</span><br><span class="line">28 &#125;</span><br><span class="line">29 </span><br><span class="line">30 func main() &#123;</span><br><span class="line">31     r := gin.Default()</span><br><span class="line">32 </span><br><span class="line">33     //中间件，只有在中间件之后注册的路由才会走中间件</span><br><span class="line">34     r.Use(middleware())</span><br><span class="line">35     //http://localhost:8081/middle</span><br><span class="line">36     r.GET(&quot;/middle&quot;, middle)</span><br><span class="line">37 </span><br><span class="line">38     r.Run(&quot;:8081&quot;)</span><br><span class="line">39 &#125;</span><br></pre></td></tr></table></figure>
-
-<p>每次执行路由函数middle()之前都会执行middleware()函数，在执行到middleware函数中c.Next()时，会执行真正的路由函数middle()，路由函数执行完成之后会继续执行middleware()中c.Next()函数后面的代码。</p>
-<p>另一回答—</p>
-<p>gin框架中间件 c.Next() c.Abort() c.Set() c.Get 跨中间件取值 gin中间件中使用goroutine_可控的事情要谨慎，不可控的事情要乐观。-CSDN博客</p>
-<p>深入Gin框架内幕(一) - 知乎—参考该方法中的最后一部分内容（模拟请求）</p>
-<p>（1）示例1：</p>
-<p>package main</p>
-<p>import (<br>    “fmt”<br>    “github.com/gin-gonic/gin”<br>    “net/http”<br>    “time”<br>)</p>
-<p>// HandlerFunc<br>func indexHandler(c *gin.Context) {<br>    fmt.Println(“index”)<br>    c.JSON(http.StatusOK, gin.H{<br>        “msg”: “index”,<br>    })<br>}</p>
-<p>// 定义一个中间件<br>func m1(c *gin.Context) {<br>    fmt.Println(“m1 in …”)<br>    // 计时<br>    start := time.Now()<br>    c.Next() // 调用后续的处理函数</p>
-<pre><code>//c.Abort()      // 阻止调用后续的处理函数
-cost := time.Since(start)
-fmt.Printf(&quot;cost:%v\n&quot;, cost)
-fmt.Printf(&quot;m1 out ...&quot;)
-</code></pre>
-<p>}</p>
-<p>func m2(c *gin.Context) {<br>    fmt.Println(“m2 in …”)<br>    c.Next() // 调用后续的处理函数<br>    //c.Abort()   //阻止调用后续的处理函数，也就是m2它自己走完就行<br>    //return<br>    fmt.Println(“m2 out …”)<br>}</p>
-<p>func main() {<br>    r := gin.Default()</p>
-<pre><code>// 点GET查看源码发现
-// GET(relativepath string,handlers ...HandlerFunc) IRoutes 另外,...表示可传多个HandlerFunc类型的函数
- 
-//r.GET(&quot;/index&quot;, m1, indexHandler)
-//r.GET(&quot;/shop&quot;, m1, func(c *gin.Context) &#123;
-//    c.JSON(http.StatusOK, gin.H&#123;
-//        &quot;msg&quot;: &quot;shop&quot;,
-//    &#125;)
-//&#125;)
-//r.GET(&quot;/user&quot;, m1, func(c *gin.Context) &#123;
-//    c.JSON(http.StatusOK, gin.H&#123;
-//        &quot;msg&quot;: &quot;user&quot;,
-//    &#125;)
-//&#125;)
- 
-//点开use查看源码发现 Use(middleware ...HandlerFunc) IRoutes
-r.Use(m1, m2) // 全局注册中间件函数m1 m2
- 
-/*访问/index
-执行indexHandler之前去执行注册的中间件,总的执行打印顺序是:m1 in -&gt; m2 in -&gt; index -&gt; m2 out -&gt; m1 out
-*/
-r.GET(&quot;/index&quot;, indexHandler)
-r.GET(&quot;/shop&quot;, func(c *gin.Context) &#123;
-    c.JSON(http.StatusOK, gin.H&#123;
-        &quot;msg&quot;: &quot;shop&quot;,
-    &#125;)
-&#125;)
-r.GET(&quot;/user&quot;, func(c *gin.Context) &#123;
-    c.JSON(http.StatusOK, gin.H&#123;
-        &quot;msg&quot;: &quot;user&quot;,
-    &#125;)
-&#125;)
- 
-r.Run(&quot;:9090&quot;)
-</code></pre>
-<p>}<br>（2）示例2：</p>
-<p>package main</p>
-<p>import (<br>    “fmt”<br>    “github.com/gin-gonic/gin”<br>    “net/http”<br>    “time”<br>)</p>
-<p>// HandlerFunc<br>func indexHandler(c *gin.Context) {<br>    fmt.Println(“index”)</p>
-<pre><code>name, ok := c.Get(&quot;name&quot;) //取值实现了跨中间件取值
-if !ok &#123;
-    name = &quot;default user&quot;
-&#125;
-//fmt.Println(name)
- 
-c.JSON(http.StatusOK, gin.H&#123;
-    &quot;msg&quot;: name,
-&#125;)
-</code></pre>
-<p>}</p>
-<p>// 定义一个中间件<br>func m1(c *gin.Context) {<br>    fmt.Println(“m1 in…”)<br>    // 计时<br>    start := time.Now()</p>
-<pre><code>// gin中间件中使用goroutine
-// 当在中间件或handler中启动新的goroutine时,不能使用原始的上下文(c *gin.Context),必须使用其只读副本(c.Copy())
-//go otherFunc(c.Copy())     // 在otherFunc中只能使用c的拷贝
- 
-c.Next() // 调用后续的处理函数
- 
-//c.Abort() // 阻止调用后续的处理函数
-cost := time.Since(start)
-fmt.Printf(&quot;cost:%v\n&quot;, cost)
-fmt.Printf(&quot;m1 out...&quot;)
-</code></pre>
-<p>}</p>
-<p>func m2(c *gin.Context) {<br>    fmt.Println(“m2 in…”)</p>
-<pre><code>c.Set(&quot;name&quot;, &quot;tony&quot;) // 可以在请求上下文里面设置一些值,然后其他地方取值
- 
-c.Next() //调用后续的处理函数
-//c.Abort() // 阻止调用后续的处理函数,也就是m2它自己走完就行
-//return
-fmt.Println(&quot;m2 out...&quot;)
-</code></pre>
-<p>}</p>
-<p>// 自定义认证中间件,通过这种方式实现一些灵活的控制<br>func authMiddleware(doCheck bool) gin.HandlerFunc {<br>    // 连接数据库<br>    // 或其他一些准备工作<br>    return func(c *gin.Context) {<br>        if doCheck {<br>            // 这里存放具体的逻辑<br>            // 是否登录的判断<br>            //if 是登录的用户 {<br>            //    c.Next()<br>            //}else {<br>            //    c.Abort()<br>            //}<br>            name, ok := c.Get(“name”) //取值实现了跨中间件取值<br>            if ok {<br>                fmt.Println(name)<br>                c.Next()<br>                fmt.Println(“authMiddleware”)<br>            }<br>        } else {<br>            c.Next()<br>        }<br>    }<br>}</p>
-<p>func main() {<br>    r := gin.Default()</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 点开Use查看源码发现 Use(middleware ...HandlerFunc) IRoutes</span></span><br><span class="line">r.Use(m1, m2, authMiddleware(<span class="literal">true</span>)) <span class="comment">//全局注册中间件函数m1 m2 authMiddleware</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">/*访问/index</span></span><br><span class="line"><span class="comment">执行indexHandler之前,去执行注册的中间件,总的执行打印顺序是:m1 in -&gt; m2 in -&gt; index -&gt; m2 out -&gt; m1 out</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">r.GET(<span class="string">&quot;/index&quot;</span>, indexHandler)</span><br><span class="line">r.GET(<span class="string">&quot;/shop&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">		<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;shop&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br><span class="line">r.GET(<span class="string">&quot;/user&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">		<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;user&quot;</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"> </span><br><span class="line"><span class="comment">/*路由组注册中间件方法1</span></span><br><span class="line"><span class="comment">routerGroup1 := r.Group(&quot;/xx&quot;, authMiddleware(true))</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">	routerGroup1.GET(&quot;index&quot;, func(c *gin.Context) &#123;</span></span><br><span class="line"><span class="comment">		c.JSON(http.StatusOK, gin.H&#123;</span></span><br><span class="line"><span class="comment">			&quot;msg&quot;: &quot;routerGroup1&quot;,</span></span><br><span class="line"><span class="comment">		&#125;)</span></span><br><span class="line"><span class="comment">	&#125;)</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">//路由组注册中间件方法2</span></span><br><span class="line">routerGroup2 := r.Group(<span class="string">&quot;/xx2&quot;</span>)</span><br><span class="line">routerGroup2.Use(authMiddleware(<span class="literal">true</span>))</span><br><span class="line">&#123;</span><br><span class="line">	routerGroup2.GET(<span class="string">&quot;/index&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">		c.JSON(http.StatusOK, gin.H&#123;</span><br><span class="line">			<span class="string">&quot;msg&quot;</span>: <span class="string">&quot;routeGroup2&quot;</span>,</span><br><span class="line">		&#125;)</span><br><span class="line"> </span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">r.Run(<span class="string">&quot;:9090&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_42303254/article/details/116136055">https://blog.csdn.net/qq_42303254/article/details/116136055</a></p>
-
+          <h2 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h2><p>字符串类型指CHAR、VARCHAR、BINARY、VARBINARY、BLOB、TEXT、ENUM和SET。该节描述了这些类型如何工作以及如何在查询中使用这些类型。</p>
+<table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">大小</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CHAR</td>
+<td align="left">0-255 bytes</td>
+<td align="left">定长字符串</td>
+</tr>
+<tr>
+<td align="left">VARCHAR</td>
+<td align="left">0-65535 bytes</td>
+<td align="left">变长字符串</td>
+</tr>
+<tr>
+<td align="left">TINYBLOB</td>
+<td align="left">0-255 bytes</td>
+<td align="left">不超过 255 个字符的二进制字符串</td>
+</tr>
+<tr>
+<td align="left">TINYTEXT</td>
+<td align="left">0-255 bytes</td>
+<td align="left">短文本字符串</td>
+</tr>
+<tr>
+<td align="left">BLOB</td>
+<td align="left">0-65 535 bytes</td>
+<td align="left">二进制形式的长文本数据</td>
+</tr>
+<tr>
+<td align="left">TEXT</td>
+<td align="left">0-65 535 bytes</td>
+<td align="left">长文本数据</td>
+</tr>
+<tr>
+<td align="left">MEDIUMBLOB</td>
+<td align="left">0-16 777 215 bytes</td>
+<td align="left">二进制形式的中等长度文本数据</td>
+</tr>
+<tr>
+<td align="left">MEDIUMTEXT</td>
+<td align="left">0-16 777 215 bytes</td>
+<td align="left">中等长度文本数据</td>
+</tr>
+<tr>
+<td align="left">LONGBLOB</td>
+<td align="left">0-4 294 967 295 bytes</td>
+<td align="left">二进制形式的极大文本数据</td>
+</tr>
+<tr>
+<td align="left">LONGTEXT</td>
+<td align="left">0-4 294 967 295 bytes</td>
+<td align="left">极大文本数据</td>
+</tr>
+</tbody></table>
+<p>CHAR 和 VARCHAR 类型类似，但它们保存和检索的方式不同。它们的最大长度和是否尾部空格被保留等方面也不同。在存储或检索过程中不进行大小写转换。</p>
+<p>BINARY 和 VARBINARY 类似于 CHAR 和 VARCHAR，不同的是它们包含二进制字符串而不要非二进制字符串。也就是说，它们包含字节字符串而不是字符字符串。这说明它们没有字符集，并且排序和比较基于列值字节的数值值。</p>
+<p>BLOB 是一个二进制大对象，可以容纳可变数量的数据。有 4 种 BLOB 类型：TINYBLOB、BLOB、MEDIUMBLOB 和 LONGBLOB。它们区别在于可容纳存储范围不同。</p>
+<p>有 4 种 TEXT 类型：TINYTEXT、TEXT、MEDIUMTEXT 和 LONGTEXT。对应的这 4 种 BLOB 类型，可存储的最大长度不同，可根据实际情况选择。</p>
+<p>可见以上分别是为文本类型与二进制类型的对应</p>
+<h5 id="而对于图片的编码保存，有用的即是blob类型和text类型的对应"><a href="#而对于图片的编码保存，有用的即是blob类型和text类型的对应" class="headerlink" title="而对于图片的编码保存，有用的即是blob类型和text类型的对应"></a>而对于图片的编码保存，有用的即是blob类型和text类型的对应</h5><h4 id="blob可以直接储存图片的二进制编码，而text可以用来储存图片的base64编码"><a href="#blob可以直接储存图片的二进制编码，而text可以用来储存图片的base64编码" class="headerlink" title="blob可以直接储存图片的二进制编码，而text可以用来储存图片的base64编码"></a>blob可以直接储存图片的二进制编码，而text可以用来储存图片的base64编码</h4>
       
     </div>
 
@@ -493,10 +458,16 @@ fmt.Println(&quot;m2 out...&quot;)
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-01-18 11:17:37 / Modified: 11:38:13" itemprop="dateCreated datePublished" datetime="2022-01-18T11:17:37+08:00">2022-01-18</time>
+              <time title="Created: 2022-01-18 11:17:37" itemprop="dateCreated datePublished" datetime="2022-01-18T11:17:37+08:00">2022-01-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-19 21:57:02" itemprop="dateModified" datetime="2022-01-19T21:57:02+08:00">2022-01-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -526,7 +497,10 @@ fmt.Println(&quot;m2 out...&quot;)
 <p>安装swag命令行<br>要使用swaggo，首先要下载一个swag命令行。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/swaggo/swag/cmd/swag</span><br></pre></td></tr></table></figure>
 
-<p>在$ GOPATH / bin /下会看到多了一个swag。把$ GOPATH / bin /加到PATH后，就可以直接用swag命令行了。</p>
+<h4 id="下面是设置环境变量"><a href="#下面是设置环境变量" class="headerlink" title="下面是设置环境变量"></a>下面是设置环境变量</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">打开系统的环境变量设置找到系统变量</span><br><span class="line">发现在$ GOPATH / bin /下会看到多了一个swag。把$ GOPATH / bin /加到PATH后，就可以在任意目录下直接用swag命令行了。否则仅能在swag.exe所在目录下才能使用swag命令。环境变量的作用相当于一个导向作用。</span><br></pre></td></tr></table></figure>
+
+
+
 <p>在包含main.go的Go工程的根目录下执行swag init，swag会检索当前工程里的swag注解（类似上述Java中的注解），生成docs.go以及swagger.json/yaml。</p>
 <p>获取gin专用的gin-swagger<br>里面包含了一个示例代码。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger</span><br><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger/swaggerFiles</span><br></pre></td></tr></table></figure>
@@ -546,7 +520,7 @@ fmt.Println(&quot;m2 out...&quot;)
 
 
 
-<p>请注意@BasePath。 ？swagger注释中说明的@BasePath，，@Router而不是gin代码中声明的路径（没那么智能）。</p>
+<p>请注意@BasePath。swagger注释中说明的@BasePath，，@Router而不是gin代码中声明的路径（没那么智能）。</p>
 <p>具体api的说明</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// @Summary Add a new pet to the store</span></span><br><span class="line"><span class="comment">// @Description get string by ID</span></span><br><span class="line"><span class="comment">// @Accept  json</span></span><br><span class="line"><span class="comment">// @Produce  json</span></span><br><span class="line"><span class="comment">// @Param   some_id     path    int     true        &quot;Some ID&quot;</span></span><br><span class="line"><span class="comment">// @Success 200 &#123;string&#125; string	&quot;ok&quot;</span></span><br><span class="line"><span class="comment">// @Failure 400 &#123;object&#125; web.APIError &quot;We need ID!!&quot;</span></span><br><span class="line"><span class="comment">// @Failure 404 &#123;object&#125; web.APIError &quot;Can not find ID&quot;</span></span><br><span class="line"><span class="comment">// @Router /testapi/get-string-by-int/&#123;some_id&#125; [get]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStringByInt</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	err := web.APIError&#123;&#125;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -653,7 +627,7 @@ fmt.Println(&quot;m2 out...&quot;)
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
