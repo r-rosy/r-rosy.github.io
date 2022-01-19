@@ -35,11 +35,11 @@
     
     
     
+    <category term="middleware" scheme="http://example.com/tags/middleware/"/>
+    
     <category term="go" scheme="http://example.com/tags/go/"/>
     
     <category term="gin" scheme="http://example.com/tags/gin/"/>
-    
-    <category term="middleware" scheme="http://example.com/tags/middleware/"/>
     
   </entry>
   
@@ -78,13 +78,13 @@
     <category term="方法" scheme="http://example.com/categories/go/%E6%96%B9%E6%B3%95/"/>
     
     
-    <category term="token" scheme="http://example.com/tags/token/"/>
-    
     <category term="go" scheme="http://example.com/tags/go/"/>
     
-    <category term="JWT" scheme="http://example.com/tags/JWT/"/>
-    
     <category term="gin" scheme="http://example.com/tags/gin/"/>
+    
+    <category term="token" scheme="http://example.com/tags/token/"/>
+    
+    <category term="JWT" scheme="http://example.com/tags/JWT/"/>
     
   </entry>
   
