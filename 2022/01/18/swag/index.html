@@ -24,15 +24,17 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="Swag及其使用">
 <meta property="og:url" content="http://example.com/2022/01/18/swag/index.html">
-<meta property="og:site_name" content="Reesego">
+<meta property="og:site_name" content="神奈かなんのBlog">
 <meta property="og:description" content="下面以gin-swagger为例，说明swaggo的用法。 安装swag命令行要使用swaggo，首先要下载一个swag命令行。 1go get github.com&#x2F;swaggo&#x2F;swag&#x2F;cmd&#x2F;swag  下面是设置环境变量12打开系统的环境变量设置找到系统变量发现在$ GOPATH &#x2F; bin &#x2F;下会看到多了一个swag。把$ GOPATH &#x2F; bin &#x2F;加到PATH后，就可以在任意目录下">
 <meta property="og:locale">
+<meta property="og:image" content="https://user-images.githubusercontent.com/16691314/136343497-6db89882-72cb-4434-bef2-609954622492.png">
 <meta property="article:published_time" content="2022-01-18T03:17:37.000Z">
-<meta property="article:modified_time" content="2022-01-19T13:57:02.059Z">
+<meta property="article:modified_time" content="2022-01-20T01:40:02.836Z">
 <meta property="article:author" content="rosy">
 <meta property="article:tag" content="Swaggo">
 <meta property="article:tag" content="Swag">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/16691314/136343497-6db89882-72cb-4434-bef2-609954622492.png">
 
 <link rel="canonical" href="http://example.com/2022/01/18/swag/">
 
@@ -47,7 +49,7 @@
   };
 </script>
 
-  <title>Swag及其使用 | Reesego</title>
+  <title>Swag及其使用 | 神奈かなんのBlog</title>
   
 
 
@@ -78,7 +80,7 @@
   </style>
 </noscript>
 
-<link rel="alternate" href="/atom.xml" title="Reesego" type="application/atom+xml">
+<link rel="alternate" href="/atom.xml" title="神奈かなんのBlog" type="application/atom+xml">
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -99,7 +101,7 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">Reesego</h1>
+      <h1 class="site-title">神奈かなんのBlog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
       <p class="site-subtitle" itemprop="description">rosy</p>
@@ -174,11 +176,11 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="rosy">
-      <meta itemprop="description" content="记录美好生活">
+      <meta itemprop="description" content="难自拔于世界之大">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Reesego">
+      <meta itemprop="name" content="神奈かなんのBlog">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -199,7 +201,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-19 21:57:02" itemprop="dateModified" datetime="2022-01-19T21:57:02+08:00">2022-01-19</time>
+                <time title="Modified: 2022-01-20 09:40:02" itemprop="dateModified" datetime="2022-01-20T09:40:02+08:00">2022-01-20</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -253,7 +255,7 @@
 
 
 
-<p>请注意@BasePath。swagger注释中说明的@BasePath，，@Router而不是gin代码中声明的路径（没那么智能）。</p>
+<p>请注意@Router的路径。swagger注释中说明的@Router是在@BasePath下的相对路径，并不为绝对路径。</p>
 <p>具体api的说明</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// @Summary Add a new pet to the store</span></span><br><span class="line"><span class="comment">// @Description get string by ID</span></span><br><span class="line"><span class="comment">// @Accept  json</span></span><br><span class="line"><span class="comment">// @Produce  json</span></span><br><span class="line"><span class="comment">// @Param   some_id     path    int     true        &quot;Some ID&quot;</span></span><br><span class="line"><span class="comment">// @Success 200 &#123;string&#125; string	&quot;ok&quot;</span></span><br><span class="line"><span class="comment">// @Failure 400 &#123;object&#125; web.APIError &quot;We need ID!!&quot;</span></span><br><span class="line"><span class="comment">// @Failure 404 &#123;object&#125; web.APIError &quot;Can not find ID&quot;</span></span><br><span class="line"><span class="comment">// @Router /testapi/get-string-by-int/&#123;some_id&#125; [get]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStringByInt</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	err := web.APIError&#123;&#125;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -265,8 +267,13 @@
 <p>@Success和@Failure定义了返回值，类型可以是字符串，对象，数组。按照一般的restful定义，这三个类型足够表达返回值了。</p>
 <p>GET /collection：返回资源对象的列表（数组）<br>GET /collection/resource：返回单个资源对象<br>POST /collection：返回新生成的资源对象<br>PUT /collection/resource：返回完整的资源对象<br>PATCH /collection/resource：返回完整的资源对象<br>DELETE /collection/resource：返回一个空文档<br>不过有些不太标准的restful实践会在上述返回之上再包装一个代码/消息/正文，所以对swaggo来说会造成一些新的负担，因为必须为这些返回类型单独加对应的类型。这项。</p>
 <p>swag初始化<br>在项目根目录里执行swag init，生成docs/docs.go；再执行go run main.go，访问<a target="_blank" rel="noopener" href="http://localhost:8080/swagger/index.html%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%84%89%E5%BF%AB%E7%9A%84%E4%BD%BF%E7%94%A8swagger">http://localhost:8080/swagger/index.html，就可以愉快的使用swagger</a> ui了。</p>
-<p>参考原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34857250/article/details/105122232">https://blog.csdn.net/qq_34857250/article/details/105122232</a></p>
-
+<h4 id="以下是可能出现的问题"><a href="#以下是可能出现的问题" class="headerlink" title="以下是可能出现的问题"></a>以下是可能出现的问题</h4><ul>
+<li><p><strong>swagger页面出现加载错误</strong></p>
+<h1 id="mitting-host-returns-Internal-Server-Error-500-1019"><a href="#mitting-host-returns-Internal-Server-Error-500-1019" class="headerlink" title="mitting host returns Internal Server Error (500) #1019"></a>mitting host returns Internal Server Error (500) #1019</h1><h4 id="akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment"><a href="#akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment" class="headerlink" title="akshay196 opened this issue on 7 Oct 2021 · 1 comment"></a><strong><a target="_blank" rel="noopener" href="https://github.com/akshay196">akshay196</a> opened this issue on 7 Oct 2021 · 1 comment</strong></h4><p><strong>Describe the bug</strong> </p>
+<p>[<img src="https://user-images.githubusercontent.com/16691314/136343497-6db89882-72cb-4434-bef2-609954622492.png" alt="Screenshot from 2021-10-07 13-26-58"></p>
+</li>
+</ul>
+<h3 id="问题原因以及解决方案"><a href="#问题原因以及解决方案" class="headerlink" title="问题原因以及解决方案"></a>问题原因以及解决方案</h3><h5 id="没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”"><a href="#没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”" class="headerlink" title="没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”"></a>没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”</h5>
     </div>
 
     
@@ -347,14 +354,14 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E6%98%AF%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">下面是设置环境变量</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E9%9D%A2%E6%98%AF%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">下面是设置环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A5%E4%B8%8B%E6%98%AF%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">以下是可能出现的问题</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#mitting-host-returns-Internal-Server-Error-500-1019"><span class="nav-number"></span> <span class="nav-text">mitting host returns Internal Server Error (500) #1019</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#akshay196-opened-this-issue-on-7-Oct-2021-%C2%B7-1-comment"><span class="nav-number">1.</span> <span class="nav-text">akshay196 opened this issue on 7 Oct 2021 · 1 comment</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%E5%8E%9F%E5%9B%A0%E4%BB%A5%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number"></span> <span class="nav-text">问题原因以及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B2%A1%E6%9C%89import-%E4%B9%8B%E5%89%8Dswag-init%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E7%9A%84%E2%80%9Ddocs%E2%80%9C%E5%8C%85%EF%BC%8C%E8%AF%B7%E8%87%AA%E8%A1%8Cimport%E3%80%82%E8%8B%A5%E5%9B%A0%E4%B8%BAdocs%E5%8C%85%E5%AF%BC%E5%85%A5%E5%8D%B4%E6%9C%AA%E4%BD%BF%E7%94%A8%E7%9A%84%E5%8E%9F%E5%9B%A0%E8%87%B4%E4%BD%BFgo%E7%BC%96%E8%AF%91%E5%99%A8%E6%8A%A5%E9%94%99%EF%BC%8C%E8%87%AA%E8%A1%8C%E5%9C%A8%E5%8C%85%E5%89%8D%E5%8A%A0%E4%B8%8A%E5%8C%BF%E5%90%8D%E5%AD%97%E6%AE%B5%E2%80%9D-%E2%80%9D"><span class="nav-number">0.1.</span> <span class="nav-text">没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
   <p class="site-author-name" itemprop="name">rosy</p>
-  <div class="site-description" itemprop="description">记录美好生活</div>
+  <div class="site-description" itemprop="description">难自拔于世界之大</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
