@@ -164,6 +164,92 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/20/order/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="rosy">
+      <meta itemprop="description" content="难自拔于世界之大">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神奈かなんのBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/20/order/" class="post-title-link" itemprop="url">gorm中的注意点</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-20 22:07:59 / Modified: 22:11:31" itemprop="dateCreated datePublished" datetime="2022-01-20T22:07:59+08:00">2022-01-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/go/gorm/" itemprop="url" rel="index"><span itemprop="name">gorm</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/19/PhotoEncoding/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -646,20 +732,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
