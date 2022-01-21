@@ -164,6 +164,121 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/21/go-python/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="rosy">
+      <meta itemprop="description" content="难自拔于世界之大">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神奈かなんのBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/21/go-python/" class="post-title-link" itemprop="url">go/python</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-01-21 09:04:02 / Modified: 09:19:34" itemprop="dateCreated datePublished" datetime="2022-01-21T09:04:02+08:00">2022-01-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>由于一些原因，python库不方便使用golang重构实现，因此我们可以通过go调用python库的方式来达到实现需求的目的</p>
+</blockquote>
+<ul>
+<li>通过shell命令组装的方式调用python</li>
+</ul>
+<blockquote>
+<p>主要使用到了go的<code>os/exec</code>包，以及python的<code>-c</code>参数</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">(point <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> err error</span><br><span class="line">	<span class="keyword">var</span> cmd *exec.Cmd</span><br><span class="line">	<span class="keyword">var</span> datas []<span class="keyword">byte</span></span><br><span class="line">	py := <span class="string">&quot;python&quot;</span></span><br><span class="line">	flag := <span class="string">&quot;-c&quot;</span></span><br><span class="line">	importmodule := <span class="string">&quot;import sys&quot;</span></span><br><span class="line">	Target := <span class="string">&quot;print(sys.path)&quot;</span></span><br><span class="line">	params := fmt.Sprintf(<span class="string">&quot;%s;%s&quot;</span>, importmodule, Target)</span><br><span class="line">	fmt.Println(params)</span><br><span class="line">	cmd = exec.Command(py, flag, params)</span><br><span class="line">	<span class="keyword">if</span> datas, err = cmd.Output(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(err)</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(datas))</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">复制代码</span><br></pre></td></tr></table></figure>
+
+<p>同样的，在使用其他自写python库时，先将python代码路径加入到<code>sys.path</code>路径下，再进行调用即可。</p>
+<p>作者：顾明同学<br>链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6947888630136307748">https://juejin.cn/post/6947888630136307748</a><br>来源：稀土掘金</p>
+<p>最近有一个项目需要在服务端调用Python3.7写的算法，网上找了一圈，发现两个库都使用cgo特性调用了Python的C-API：</p>
+<p>针对Python2:</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/sbinet/go-python">https://github.com/sbinet/go-pythongithub.com/sbinet/go-python</a></p>
+<p>针对Python3:</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/DataDog/go-python3">https://github.com/DataDog/go-python3github.com/DataDog/go-python3</a></p>
+<hr>
+<p>由于我这边的算法是Python3.7写的，自然使用<strong>go-python3</strong>这个库，安装方法也简单，使用下面的命令：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/DataDog/<span class="keyword">go</span>-python3</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装库时，可能会提示找不到python3.pc这个文件，这时可以先安装对应有dev包，用pyenv就可以安装，然后配置PKG_CONFIGPATH到对应的pkgconfig文件下，那里会有python3.pc。重新配置好PKG_CONFIG_PATH后，再执行go get命令应该就不会报错了。</strong></p>
+<p>参考命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/Users/yourname/.pyenv/versions/3.7-dev/lib/pkgconfig/ </span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>Golang中调用Python3时，一定要注意设置包的查找路径，参考代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func ImportModule(dir, name string) *python3.PyObject &#123;</span><br><span class="line">   sysModule := python3.PyImport_ImportModule(&quot;sys&quot;) </span><br><span class="line">   path := sysModule.GetAttrString(&quot;path&quot;)                    </span><br><span class="line">   python3.PyList_Insert(path, 0, python3.PyUnicode_FromString(&quot;/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages&quot;))</span><br><span class="line">   python3.PyList_Insert(path, 0, python3.PyUnicode_FromString(dir)</span><br><span class="line">   return python3.PyImport_ImportModule(name)           </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面函数直接对系统的PATH变量进行了配置，dir变量用来传入自定义的模块路径（自已写的算法包等等），name是算法包的名字。</p>
+<p>正常的调用步骤为：</p>
+<ol>
+<li>python3.Py_Initialize()初始化调用环境；</li>
+<li>引入模块；</li>
+<li>GetAttrString()得到算法包；</li>
+<li>配置传入参数，调用Call()执行算法；</li>
+<li>解析算法返回的结果；</li>
+<li>python3.Py_Finalize()销毁Python3运行环境。</li>
+</ol>
+<p>这里给出示例代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">func PyTest() &#123;</span><br><span class="line">    python3.Py_Initialize()</span><br><span class="line">   if !python3.Py_IsInitialized() &#123;</span><br><span class="line">      fmt.Println(&quot;Error initializing the python interpreter&quot;)</span><br><span class="line">      os.Exit(1)</span><br><span class="line">   &#125;</span><br><span class="line">   v := ImportModule(&quot;/Users/yourname/Desktop/lab/pppython&quot;, &quot;value_pp&quot;)</span><br><span class="line"></span><br><span class="line">   b := v.GetAttrString(&quot;estimate_pp&quot;)</span><br><span class="line">   fmt.Printf(&quot;[FUNC] b = %#v\n&quot;, b)</span><br><span class="line">   bArgs := python3.PyTuple_New(1)</span><br><span class="line">   python3.PyTuple_SetItem(bArgs, 0, python3.PyUnicode_FromString(&quot;/Users/yourname/Desktop/lab/pppython/srcdata/67.csv&quot;))</span><br><span class="line">   re := b.Call(bArgs, python3.Py_None)</span><br><span class="line">   fmt.Println(&quot;IsCallable: &quot;, python3.PyCallable_Check(b))</span><br><span class="line">   re1 := python3.PyTuple_GetItem(re, 0)</span><br><span class="line">   re2 := python3.PyTuple_GetItem(re, 1)</span><br><span class="line">   fmt.Println(&quot;re1:&quot;, python3.PyLong_AsLong(re1))</span><br><span class="line">   fmt.Println(&quot;re2:&quot;, python3.PyLong_AsLong(re2))</span><br><span class="line">   python3.Py_Finalize()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于算法中返回多个值时对应的是Tuple，所以上面采用了PyTupleGetItem来得到相应的元素，但拿到这个值还不能直接输出使用，因为它还是PyObject类型，需要根据实际类型再调用As相关的函数进行一次转化后再输出，比如这里用的是pythone.PyLong_AsLong。</p>
+<hr>
+<p>go-python3这个库的源码比较简单，可以直接查看，也可以对比<a href="https://link.zhihu.com/?target=https://docs.python.org/3.7/c-api/index.html">https://docs.python.org/3.7/c-api/index.html</a>去理解。这里写的是Python3的调用方法，至python2相关的可以参考GO语言中文网的一篇文章</p>
+<p><a href="https://link.zhihu.com/?target=https://studygolang.com/articles/11155">https://studygolang.com/articles/11155studygolang.com/articles/11155</a></p>
+<p>里面用的是go-python库。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/20/order/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -732,7 +847,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -745,7 +860,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
