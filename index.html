@@ -178,7 +178,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2022/01/23/WSL-Ubuntu-20-04-LTS/" class="post-title-link" itemprop="url">WSL-Ubuntu-20.04-LTS出现的一些使用问题</a>
+            <a href="/2022/01/23/WSL-Ubuntu-20-04-LTS/" class="post-title-link" itemprop="url">WSL2-Ubuntu-20.04-LTS出现的一些使用问题</a>
         </h2>
 
         <div class="post-meta">
@@ -195,7 +195,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-24 14:06:11" itemprop="dateModified" datetime="2022-01-24T14:06:11+08:00">2022-01-24</time>
+                <time title="Modified: 2022-01-24 20:19:28" itemprop="dateModified" datetime="2022-01-24T20:19:28+08:00">2022-01-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -203,15 +203,15 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/wsl/" itemprop="url" rel="index"><span itemprop="name">wsl</span></a>
+                  <a href="/categories/wsl2/" itemprop="url" rel="index"><span itemprop="name">wsl2</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/wsl/ubuntu/" itemprop="url" rel="index"><span itemprop="name">ubuntu</span></a>
+                  <a href="/categories/wsl2/ubuntu/" itemprop="url" rel="index"><span itemprop="name">ubuntu</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/wsl/ubuntu/TLS/" itemprop="url" rel="index"><span itemprop="name">TLS</span></a>
+                  <a href="/categories/wsl2/ubuntu/TLS/" itemprop="url" rel="index"><span itemprop="name">TLS</span></a>
                 </span>
             </span>
 
@@ -240,7 +240,15 @@
 
 <h3 id="Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"><a href="#Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。" class="headerlink" title="Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"></a>Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。</h3><h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><h4 id="解决的方法很简单"><a href="#解决的方法很简单" class="headerlink" title="解决的方法很简单"></a>解决的方法很简单</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum/dnf install packagemame --nogpgcheck</span><br></pre></td></tr></table></figure>
 
-<h4 id="没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。"><a href="#没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。" class="headerlink" title="没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。"></a>没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。</h4>
+<h4 id="没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。"><a href="#没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。" class="headerlink" title="没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。"></a>没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。</h4><h4 id="5-ubuntu初次安装mysql查看初始密码以登录"><a href="#5-ubuntu初次安装mysql查看初始密码以登录" class="headerlink" title="5.ubuntu初次安装mysql查看初始密码以登录"></a>5.ubuntu初次安装mysql查看初始密码以登录</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo cat /etc/mysql/debian.cnf</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-Ubuntu启动mysql异常报错"><a href="#6-Ubuntu启动mysql异常报错" class="headerlink" title="6.Ubuntu启动mysql异常报错"></a>6.Ubuntu启动mysql异常报错</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 2002 (HY000): Can<span class="string">&#x27;t connect to local MySQL server through socket &#x27;</span>/var/run/mysqld/mysqld.sock<span class="string">&#x27; (2)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h5 id="没有启动mysql的服务程序"><a href="#没有启动mysql的服务程序" class="headerlink" title="没有启动mysql的服务程序"></a>没有启动mysql的服务程序</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">——sudo service mysql restart</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id=""><a href="#" class="headerlink" title=""></a></h5>
       
     </div>
 
