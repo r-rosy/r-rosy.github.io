@@ -81,6 +81,36 @@
       </tags>
   </entry>
   <entry>
+    <title>WSL-Ubuntu-20.04-LTS出现的一些使用问题</title>
+    <url>/2022/01/23/WSL-Ubuntu-20-04-LTS/</url>
+    <content><![CDATA[<h3 id="有时候会出现这样的报错"><a href="#有时候会出现这样的报错" class="headerlink" title="有时候会出现这样的报错"></a>有时候会出现这样的报错</h3><h5 id="1-在linux中使用git时，连接远程仓库时会出现报错"><a href="#1-在linux中使用git时，连接远程仓库时会出现报错" class="headerlink" title="1.在linux中使用git时，连接远程仓库时会出现报错"></a>1.在linux中使用git时，连接远程仓库时会出现报错</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">RPC failed; curl 7 GnuTLS recv error</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global http.sslVerify <span class="literal">false</span></span><br><span class="line">$ git config --global http.postBuffer 1048576000</span><br></pre></td></tr></table></figure>
+
+<h4 id="对全局生效"><a href="#对全局生效" class="headerlink" title="对全局生效~"></a>对全局生效~</h4><h4 id="即可解决"><a href="#即可解决" class="headerlink" title="即可解决"></a>即可解决</h4><h4 id="2-在linux中使用go-get出现一样的错误则按以下方法"><a href="#2-在linux中使用go-get出现一样的错误则按以下方法" class="headerlink" title="2.在linux中使用go get出现一样的错误则按以下方法"></a>2.在linux中使用go get出现一样的错误则按以下方法</h4><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">go</span> env -w GO111MODULE=on</span><br><span class="line"><span class="keyword">go</span> env -w GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="即可解决-1"><a href="#即可解决-1" class="headerlink" title="即可解决"></a>即可解决</h3><h4 id="3-CentOS-8在本地使用ymp安装mysql-server报错"><a href="#3-CentOS-8在本地使用ymp安装mysql-server报错" class="headerlink" title="3.CentOS 8在本地使用ymp安装mysql-server报错"></a>3.CentOS 8在本地使用ymp安装mysql-server报错</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Error: Unable to find a match: mysql-community-server</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install mysql-community-server</span><br><span class="line">Last metadata expiration check: 0:13:40 ago on Sun 26 Apr 2020 11:20:57 AM CST.</span><br><span class="line">No match <span class="keyword">for</span> argument: mysql-community-server</span><br><span class="line">Error: Unable to find a match: mysql-community-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解决：</span></span><br><span class="line"><span class="comment"># 先执行：yum module disable mysql</span></span><br><span class="line"><span class="comment"># 再执行：yum -y install mysql-community-server</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-用ymp安装mysql-server报错"><a href="#4-用ymp安装mysql-server报错" class="headerlink" title="4.用ymp安装mysql-server报错"></a>4.用ymp安装mysql-server报错</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Import of key(s) didn<span class="string">&#x27;t help, wrong key(s)?</span></span><br><span class="line"><span class="string">Public key for mysql-community-client-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-client-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-common-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-common-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-libs-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-libs-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-server-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-server-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">The downloaded packages were saved in cache until the next successful transaction.</span></span><br><span class="line"><span class="string">You can remove cached packages by executing &#x27;</span>yum clean packages<span class="string">&#x27;.</span></span><br><span class="line"><span class="string">Error: GPG check FAILED</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"><a href="#Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。" class="headerlink" title="Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"></a>Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。</h3><h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><h4 id="解决的方法很简单"><a href="#解决的方法很简单" class="headerlink" title="解决的方法很简单"></a>解决的方法很简单</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum/dnf install packagemame --nogpgcheck</span><br></pre></td></tr></table></figure>
+
+<h4 id="没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。"><a href="#没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。" class="headerlink" title="没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。"></a>没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。</h4>]]></content>
+      <categories>
+        <category>wsl</category>
+        <category>ubuntu</category>
+        <category>TLS</category>
+      </categories>
+      <tags>
+        <tag>wsl</tag>
+        <tag>ubuntu</tag>
+        <tag>TLS</tag>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>go/python</title>
     <url>/2022/01/21/go-python/</url>
     <content><![CDATA[<blockquote>
@@ -138,34 +168,6 @@
       <tags>
         <tag>go</tag>
         <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gorm中的注意点</title>
-    <url>/2022/01/20/order/</url>
-    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>go</category>
-        <category>gorm</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>gorm</tag>
       </tags>
   </entry>
   <entry>
@@ -227,26 +229,31 @@
       </tags>
   </entry>
   <entry>
-    <title>viper</title>
-    <url>/2022/01/18/viper/</url>
-    <content><![CDATA[<h3 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h3><p>Viper需要最少知道在哪里查找配置文件的配置。Viper支持<code>JSON</code>、<code>TOML</code>、<code>YAML</code>、<code>HCL</code>、<code>envfile</code>和<code>Java properties</code>格式的配置文件。Viper可以搜索多个路径，但目前单个Viper实例只支持单个配置文件。Viper不默认任何配置搜索路径，将默认决策留给应用程序。</p>
-<p>下面是一个如何使用Viper搜索和读取配置文件的示例。不需要任何特定的路径，但是至少应该提供一个配置文件预期出现的路径。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">viper.SetConfigFile(<span class="string">&quot;./config.yaml&quot;</span>) <span class="comment">// 指定配置文件路径</span></span><br><span class="line">viper.SetConfigName(<span class="string">&quot;config&quot;</span>) <span class="comment">// 配置文件名称(无扩展名)</span></span><br><span class="line">viper.SetConfigType(<span class="string">&quot;yaml&quot;</span>) <span class="comment">// 如果配置文件的名称中没有扩展名，则需要配置此项</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;/etc/appname/&quot;</span>)   <span class="comment">// 查找配置文件所在的路径</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;$HOME/.appname&quot;</span>)  <span class="comment">// 多次调用以添加多个搜索路径</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;.&quot;</span>)               <span class="comment">// 还可以在工作目录中查找配置</span></span><br><span class="line">err := viper.ReadInConfig() <span class="comment">// 查找并读取配置文件</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123; <span class="comment">// 处理读取配置文件的错误</span></span><br><span class="line">	<span class="built_in">panic</span>(fmt.Errorf(<span class="string">&quot;Fatal error config file: %s \n&quot;</span>, err))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>gorm中的注意点</title>
+    <url>/2022/01/20/order/</url>
+    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
 
-<p>在加载配置文件出错时，你可以像下面这样处理找不到配置文件的特定情况：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> err := viper.ReadInConfig(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> _, ok := err.(viper.ConfigFileNotFoundError); ok &#123;</span><br><span class="line">        <span class="comment">// 配置文件未找到错误；如果需要可以忽略</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 配置文件被找到，但产生了另外的错误</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置文件找到并成功解析</span></span><br></pre></td></tr></table></figure>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="不想太复杂，简单点的用法，就直接参考以下"><a href="#不想太复杂，简单点的用法，就直接参考以下" class="headerlink" title="不想太复杂，简单点的用法，就直接参考以下"></a>不想太复杂，简单点的用法，就直接参考以下</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> config</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/spf13/viper&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConfigInit</span><span class="params">()</span></span> &#123;</span><br><span class="line">	viper.SetConfigFile(<span class="string">&quot;./conf/config.yaml&quot;</span>)<span class="comment">//配置文件的路径</span></span><br><span class="line">	viper.SetConfigName(<span class="string">&quot;config&quot;</span>)<span class="comment">//配置文件的名称</span></span><br><span class="line">	viper.AddConfigPath(<span class="string">&quot;./conf&quot;</span>)<span class="comment">//添加viper的配置文件搜索路径</span></span><br><span class="line">	err := viper.ReadInConfig()<span class="comment">//viper完成配置文件的读取</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
 
+<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
+<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
 
-<h4 id="在main-go主函数中运行ConfigInit-后"><a href="#在main-go主函数中运行ConfigInit-后" class="headerlink" title="在main.go主函数中运行ConfigInit()后"></a>在main.go主函数中运行ConfigInit()后</h4><h5 id="即可以在后面随时调用viper-Get-“mysql-host”-这样的形式去调取config-yaml里的配置文件信息"><a href="#即可以在后面随时调用viper-Get-“mysql-host”-这样的形式去调取config-yaml里的配置文件信息" class="headerlink" title="即可以在后面随时调用viper.Get(“mysql.host”)这样的形式去调取config.yaml里的配置文件信息"></a>即可以在后面随时调用viper.Get(“mysql.host”)这样的形式去调取config.yaml里的配置文件信息</h5><h4 id="还有一些如viper-GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。"><a href="#还有一些如viper-GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。" class="headerlink" title="还有一些如viper.GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。"></a>还有一些如viper.GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。</h4>]]></content>
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+]]></content>
       <categories>
         <category>go</category>
+        <category>gorm</category>
       </categories>
       <tags>
         <tag>go</tag>
-        <tag>viper</tag>
+        <tag>gorm</tag>
       </tags>
   </entry>
   <entry>
@@ -269,6 +276,29 @@
         <tag>token</tag>
         <tag>JWT</tag>
         <tag>gin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>viper</title>
+    <url>/2022/01/18/viper/</url>
+    <content><![CDATA[<h3 id="读取配置文件"><a href="#读取配置文件" class="headerlink" title="读取配置文件"></a>读取配置文件</h3><p>Viper需要最少知道在哪里查找配置文件的配置。Viper支持<code>JSON</code>、<code>TOML</code>、<code>YAML</code>、<code>HCL</code>、<code>envfile</code>和<code>Java properties</code>格式的配置文件。Viper可以搜索多个路径，但目前单个Viper实例只支持单个配置文件。Viper不默认任何配置搜索路径，将默认决策留给应用程序。</p>
+<p>下面是一个如何使用Viper搜索和读取配置文件的示例。不需要任何特定的路径，但是至少应该提供一个配置文件预期出现的路径。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">viper.SetConfigFile(<span class="string">&quot;./config.yaml&quot;</span>) <span class="comment">// 指定配置文件路径</span></span><br><span class="line">viper.SetConfigName(<span class="string">&quot;config&quot;</span>) <span class="comment">// 配置文件名称(无扩展名)</span></span><br><span class="line">viper.SetConfigType(<span class="string">&quot;yaml&quot;</span>) <span class="comment">// 如果配置文件的名称中没有扩展名，则需要配置此项</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;/etc/appname/&quot;</span>)   <span class="comment">// 查找配置文件所在的路径</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;$HOME/.appname&quot;</span>)  <span class="comment">// 多次调用以添加多个搜索路径</span></span><br><span class="line">viper.AddConfigPath(<span class="string">&quot;.&quot;</span>)               <span class="comment">// 还可以在工作目录中查找配置</span></span><br><span class="line">err := viper.ReadInConfig() <span class="comment">// 查找并读取配置文件</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123; <span class="comment">// 处理读取配置文件的错误</span></span><br><span class="line">	<span class="built_in">panic</span>(fmt.Errorf(<span class="string">&quot;Fatal error config file: %s \n&quot;</span>, err))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在加载配置文件出错时，你可以像下面这样处理找不到配置文件的特定情况：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> err := viper.ReadInConfig(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> _, ok := err.(viper.ConfigFileNotFoundError); ok &#123;</span><br><span class="line">        <span class="comment">// 配置文件未找到错误；如果需要可以忽略</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 配置文件被找到，但产生了另外的错误</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置文件找到并成功解析</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="不想太复杂，简单点的用法，就直接参考以下"><a href="#不想太复杂，简单点的用法，就直接参考以下" class="headerlink" title="不想太复杂，简单点的用法，就直接参考以下"></a>不想太复杂，简单点的用法，就直接参考以下</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> config</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;log&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/spf13/viper&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ConfigInit</span><span class="params">()</span></span> &#123;</span><br><span class="line">	viper.SetConfigFile(<span class="string">&quot;./conf/config.yaml&quot;</span>)<span class="comment">//配置文件的路径</span></span><br><span class="line">	viper.SetConfigName(<span class="string">&quot;config&quot;</span>)<span class="comment">//配置文件的名称</span></span><br><span class="line">	viper.AddConfigPath(<span class="string">&quot;./conf&quot;</span>)<span class="comment">//添加viper的配置文件搜索路径</span></span><br><span class="line">	err := viper.ReadInConfig()<span class="comment">//viper完成配置文件的读取</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="在main-go主函数中运行ConfigInit-后"><a href="#在main-go主函数中运行ConfigInit-后" class="headerlink" title="在main.go主函数中运行ConfigInit()后"></a>在main.go主函数中运行ConfigInit()后</h4><h5 id="即可以在后面随时调用viper-Get-“mysql-host”-这样的形式去调取config-yaml里的配置文件信息"><a href="#即可以在后面随时调用viper-Get-“mysql-host”-这样的形式去调取config-yaml里的配置文件信息" class="headerlink" title="即可以在后面随时调用viper.Get(“mysql.host”)这样的形式去调取config.yaml里的配置文件信息"></a>即可以在后面随时调用viper.Get(“mysql.host”)这样的形式去调取config.yaml里的配置文件信息</h5><h4 id="还有一些如viper-GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。"><a href="#还有一些如viper-GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。" class="headerlink" title="还有一些如viper.GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。"></a>还有一些如viper.GetString等等其他函数以及对配置文件的增删查改操作，可以自行去google，在此不做展开。</h4>]]></content>
+      <categories>
+        <category>go</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>viper</tag>
       </tags>
   </entry>
 </search>

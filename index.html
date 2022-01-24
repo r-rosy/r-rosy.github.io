@@ -164,6 +164,101 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/23/WSL-Ubuntu-20-04-LTS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="rosy">
+      <meta itemprop="description" content="难自拔于世界之大">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="神奈かなんのBlog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/01/23/WSL-Ubuntu-20-04-LTS/" class="post-title-link" itemprop="url">WSL-Ubuntu-20.04-LTS出现的一些使用问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-01-23 20:04:29" itemprop="dateCreated datePublished" datetime="2022-01-23T20:04:29+08:00">2022-01-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-01-24 14:06:11" itemprop="dateModified" datetime="2022-01-24T14:06:11+08:00">2022-01-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/wsl/" itemprop="url" rel="index"><span itemprop="name">wsl</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/wsl/ubuntu/" itemprop="url" rel="index"><span itemprop="name">ubuntu</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/wsl/ubuntu/TLS/" itemprop="url" rel="index"><span itemprop="name">TLS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h3 id="有时候会出现这样的报错"><a href="#有时候会出现这样的报错" class="headerlink" title="有时候会出现这样的报错"></a>有时候会出现这样的报错</h3><h5 id="1-在linux中使用git时，连接远程仓库时会出现报错"><a href="#1-在linux中使用git时，连接远程仓库时会出现报错" class="headerlink" title="1.在linux中使用git时，连接远程仓库时会出现报错"></a>1.在linux中使用git时，连接远程仓库时会出现报错</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RPC failed; curl 7 GnuTLS recv error</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global http.sslVerify <span class="literal">false</span></span><br><span class="line">$ git config --global http.postBuffer 1048576000</span><br></pre></td></tr></table></figure>
+
+<h4 id="对全局生效"><a href="#对全局生效" class="headerlink" title="对全局生效~"></a>对全局生效~</h4><h4 id="即可解决"><a href="#即可解决" class="headerlink" title="即可解决"></a>即可解决</h4><h4 id="2-在linux中使用go-get出现一样的错误则按以下方法"><a href="#2-在linux中使用go-get出现一样的错误则按以下方法" class="headerlink" title="2.在linux中使用go get出现一样的错误则按以下方法"></a>2.在linux中使用go get出现一样的错误则按以下方法</h4><h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> env -w GO111MODULE=on</span><br><span class="line"><span class="keyword">go</span> env -w GOPROXY=https:<span class="comment">//goproxy.cn,direct</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="即可解决-1"><a href="#即可解决-1" class="headerlink" title="即可解决"></a>即可解决</h3><h4 id="3-CentOS-8在本地使用ymp安装mysql-server报错"><a href="#3-CentOS-8在本地使用ymp安装mysql-server报错" class="headerlink" title="3.CentOS 8在本地使用ymp安装mysql-server报错"></a>3.CentOS 8在本地使用ymp安装mysql-server报错</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error: Unable to find a match: mysql-community-server</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">yum -y install mysql-community-server</span><br><span class="line">Last metadata expiration check: 0:13:40 ago on Sun 26 Apr 2020 11:20:57 AM CST.</span><br><span class="line">No match <span class="keyword">for</span> argument: mysql-community-server</span><br><span class="line">Error: Unable to find a match: mysql-community-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解决：</span></span><br><span class="line"><span class="comment"># 先执行：yum module disable mysql</span></span><br><span class="line"><span class="comment"># 再执行：yum -y install mysql-community-server</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="4-用ymp安装mysql-server报错"><a href="#4-用ymp安装mysql-server报错" class="headerlink" title="4.用ymp安装mysql-server报错"></a>4.用ymp安装mysql-server报错</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Import of key(s) didn<span class="string">&#x27;t help, wrong key(s)?</span></span><br><span class="line"><span class="string">Public key for mysql-community-client-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-client-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-common-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-common-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-libs-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-libs-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">Public key for mysql-community-server-5.7.37-1.el7.x86_64.rpm is not installed. Failing package is: mysql-community-server-5.7.37-1.el7.x86_64</span></span><br><span class="line"><span class="string"> GPG Keys are configured as: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-mysql</span></span><br><span class="line"><span class="string">The downloaded packages were saved in cache until the next successful transaction.</span></span><br><span class="line"><span class="string">You can remove cached packages by executing &#x27;</span>yum clean packages<span class="string">&#x27;.</span></span><br><span class="line"><span class="string">Error: GPG check FAILED</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"><a href="#Error-GPG-check-FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。" class="headerlink" title="Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。"></a>Error:GPG check FAILED。这由于源key错误导致的dnf或者yum（软件包管理器）安装软件失败。</h3><h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><h4 id="解决的方法很简单"><a href="#解决的方法很简单" class="headerlink" title="解决的方法很简单"></a>解决的方法很简单</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum/dnf install packagemame --nogpgcheck</span><br></pre></td></tr></table></figure>
+
+<h4 id="没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。"><a href="#没错，在命令最后添加一句-–nogpgcheck-选项就能解决此问题。" class="headerlink" title="没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。"></a>没错，在命令最后添加一句 –nogpgcheck 选项就能解决此问题。</h4>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/01/21/go-python/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -847,20 +942,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
