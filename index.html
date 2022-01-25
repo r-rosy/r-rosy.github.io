@@ -195,7 +195,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-01-24 20:19:28" itemprop="dateModified" datetime="2022-01-24T20:19:28+08:00">2022-01-24</time>
+                <time title="Modified: 2022-01-25 21:43:03" itemprop="dateModified" datetime="2022-01-25T21:43:03+08:00">2022-01-25</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -244,11 +244,56 @@
 
 <h4 id="6-Ubuntu启动mysql异常报错"><a href="#6-Ubuntu启动mysql异常报错" class="headerlink" title="6.Ubuntu启动mysql异常报错"></a>6.Ubuntu启动mysql异常报错</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 2002 (HY000): Can<span class="string">&#x27;t connect to local MySQL server through socket &#x27;</span>/var/run/mysqld/mysqld.sock<span class="string">&#x27; (2)</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h5 id="没有启动mysql的服务程序"><a href="#没有启动mysql的服务程序" class="headerlink" title="没有启动mysql的服务程序"></a>没有启动mysql的服务程序</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">——sudo service mysql restart</span><br></pre></td></tr></table></figure>
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h5 id="没有启动mysql的服务程序"><a href="#没有启动mysql的服务程序" class="headerlink" title="没有启动mysql的服务程序"></a>没有启动mysql的服务程序</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
 
 
 
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5>
+<h4 id="7-MySQL异常受到权限限制"><a href="#7-MySQL异常受到权限限制" class="headerlink" title="7.MySQL异常受到权限限制"></a>7.MySQL异常受到权限限制</h4><h5 id="前期储备"><a href="#前期储备" class="headerlink" title="前期储备"></a>前期储备</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#linux中my.cnf位置</span></span><br><span class="line"><span class="comment">#使用bash找文件的神器~来找my.cnf</span></span><br><span class="line">find / -name my.cnf</span><br><span class="line"><span class="comment">#linux中查看mysql默认密码</span></span><br><span class="line">sudo cat /etc/mysql/debian.cnf</span><br><span class="line"><span class="comment">#mysql的my.cnf文件位置</span></span><br><span class="line">vim /etc/my.cnf</span><br><span class="line"><span class="comment">#在mysqld字段下新增如下内容,然后保存退出</span></span><br><span class="line">skip-grant-tables</span><br><span class="line"><span class="comment">#执行如下命令,重启MySQL服务</span></span><br><span class="line">service mysql restart//或者 service mysqld restart</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql <span class="operator">-</span>u debian<span class="operator">-</span>sys<span class="operator">-</span>maint <span class="operator">-</span>p</span><br><span class="line">use mysql;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-Linux看隐藏文件"><a href="#8-Linux看隐藏文件" class="headerlink" title="8.Linux看隐藏文件"></a>8.Linux看隐藏文件</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls -al</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-远程ssh连接免密码认证及其可能出现的问题"><a href="#9-远程ssh连接免密码认证及其可能出现的问题" class="headerlink" title="9.远程ssh连接免密码认证及其可能出现的问题"></a>9.远程ssh连接免密码认证及其可能出现的问题</h4><p><strong>按操作步骤操作不行的最可能原因是：文件权限，不论是a机还是要访问的b机的文件的权限都要改成对应的700，600；必须严格是这个权限，否则会出现设置免密fail的情况。</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326150134382-1660723548.png" alt="img"></p>
+<h3 id="step1："><a href="#step1：" class="headerlink" title="step1："></a>step1：</h3><p><strong>在机器A中生成 私钥和公钥：</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326150303679-173787708.png" alt="img"></p>
+<p><strong>命令：ssh-keygen -t rsa，一路回车就行，如果需要passphrase密码，自行输入就行，一路回车passphrase密码为空</strong></p>
+<p><strong>此时在 ~/.ssh/ 目录下生成了公钥（id_rsa.pub）和私钥(id_rsa)</strong></p>
+<p><strong>-——————————————————————————————————————————————————————————————————————-</strong></p>
+<h3 id="step2："><a href="#step2：" class="headerlink" title="step2："></a>step2：</h3><p><strong>把机器A的公钥（id_rsa.pub）复制到机器B ~/.ssh/authorized_keys 文件里，两种常用方法</strong></p>
+<p><strong>方法1：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">scp ~/.ssh/id_rsa.pub username@host:/home/B/id_rsa.pub</span><br><span class="line"></span><br><span class="line">//此时scp需要输入 登录机器B username用户的密码</span><br><span class="line"></span><br><span class="line">//然后进入机器B内把 /home/B/id_rsa.pub 文件内容加写进 ~/.ssh/authorized_keys 文件：</span><br><span class="line"></span><br><span class="line">cat /home/B/id_rsa.pub /home/B/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法2：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//在机器A中使用 ssh-copy-id 把公钥加写到机器B的 ~/.ssh/authorized_keys 文件</span><br><span class="line"></span><br><span class="line">ssh-copy-id username@host</span><br><span class="line"></span><br><span class="line">//执行后输入机器B username用户的密码，效果和方法1一样</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3："><a href="#step3：" class="headerlink" title="step3："></a>step3：</h3><p><strong>修改机器B ~/.ssh/authorized_keys 文件的权限：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>此时如果机器B没有~/.ssh 目录需要手动创建</strong></p>
+<p><strong>-——————————————————————————————————————————————————————————————————————-</strong></p>
+<h3 id="step4："><a href="#step4：" class="headerlink" title="step4："></a>step4：</h3><p><strong>此时机器A可以进行免验证登录 机器B</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh username@host</span><br></pre></td></tr></table></figure>
+
+<p><strong>参阅网上很多方法后，发现步骤都差不多，但是却屡屡失败，设置完后仍然要输入密码，后面发现了是被登录机器的文件权限问题：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//用户权限</span><br><span class="line"></span><br><span class="line">chmod 700 /home/username</span><br><span class="line"></span><br><span class="line">//.ssh文件夹权限</span><br><span class="line"></span><br><span class="line">chmod 700 ~/.ssh/</span><br><span class="line"></span><br><span class="line">// ~/.ssh/authorized_keys 文件权限</span><br><span class="line"></span><br><span class="line">chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>还有可能这个文件内容被注释了（改成下图的状态）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326151902673-559452534.png" alt="img"></p>
+<p><strong>1 如果还是无法登陆，可能是Linux禁用了root账户ssh登陆，解决方法：</strong></p>
+<p><strong>编辑配置文件</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p><strong>2 修改  <code>PermitRootLogin</code> 后面的 no 为 yes，并且去掉前面的注释符，同时可以限制失败次数注意： 这个失败次数是对所有用户都起作用的。</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#LoginGraceTime 2m</span></span><br><span class="line">PermitRootLogin yes</span><br><span class="line"><span class="comment">#StrictModes yes</span></span><br><span class="line">MaxAuthTries 3</span><br><span class="line"><span class="comment">#MaxSessions 10</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3 重启 sshd 服务：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart sshd.service</span><br></pre></td></tr></table></figure>
+
+
       
     </div>
 

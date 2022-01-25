@@ -101,11 +101,56 @@
 
 <h4 id="6-Ubuntu启动mysql异常报错"><a href="#6-Ubuntu启动mysql异常报错" class="headerlink" title="6.Ubuntu启动mysql异常报错"></a>6.Ubuntu启动mysql异常报错</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ERROR 2002 (HY000): Can<span class="string">&#x27;t connect to local MySQL server through socket &#x27;</span>/var/run/mysqld/mysqld.sock<span class="string">&#x27; (2)</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h5 id="没有启动mysql的服务程序"><a href="#没有启动mysql的服务程序" class="headerlink" title="没有启动mysql的服务程序"></a>没有启动mysql的服务程序</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">——sudo service mysql restart</span><br></pre></td></tr></table></figure>
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><h5 id="没有启动mysql的服务程序"><a href="#没有启动mysql的服务程序" class="headerlink" title="没有启动mysql的服务程序"></a>没有启动mysql的服务程序</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service mysql restart</span><br></pre></td></tr></table></figure>
 
 
 
-<h5 id=""><a href="#" class="headerlink" title=""></a></h5>]]></content>
+<h4 id="7-MySQL异常受到权限限制"><a href="#7-MySQL异常受到权限限制" class="headerlink" title="7.MySQL异常受到权限限制"></a>7.MySQL异常受到权限限制</h4><h5 id="前期储备"><a href="#前期储备" class="headerlink" title="前期储备"></a>前期储备</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#linux中my.cnf位置</span></span><br><span class="line"><span class="comment">#使用bash找文件的神器~来找my.cnf</span></span><br><span class="line">find / -name my.cnf</span><br><span class="line"><span class="comment">#linux中查看mysql默认密码</span></span><br><span class="line">sudo cat /etc/mysql/debian.cnf</span><br><span class="line"><span class="comment">#mysql的my.cnf文件位置</span></span><br><span class="line">vim /etc/my.cnf</span><br><span class="line"><span class="comment">#在mysqld字段下新增如下内容,然后保存退出</span></span><br><span class="line">skip-grant-tables</span><br><span class="line"><span class="comment">#执行如下命令,重启MySQL服务</span></span><br><span class="line">service mysql restart//或者 service mysqld restart</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql <span class="operator">-</span>u debian<span class="operator">-</span>sys<span class="operator">-</span>maint <span class="operator">-</span>p</span><br><span class="line">use mysql;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-Linux看隐藏文件"><a href="#8-Linux看隐藏文件" class="headerlink" title="8.Linux看隐藏文件"></a>8.Linux看隐藏文件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ls -al</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-远程ssh连接免密码认证及其可能出现的问题"><a href="#9-远程ssh连接免密码认证及其可能出现的问题" class="headerlink" title="9.远程ssh连接免密码认证及其可能出现的问题"></a>9.远程ssh连接免密码认证及其可能出现的问题</h4><p><strong>按操作步骤操作不行的最可能原因是：文件权限，不论是a机还是要访问的b机的文件的权限都要改成对应的700，600；必须严格是这个权限，否则会出现设置免密fail的情况。</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326150134382-1660723548.png" alt="img"></p>
+<h3 id="step1："><a href="#step1：" class="headerlink" title="step1："></a>step1：</h3><p><strong>在机器A中生成 私钥和公钥：</strong></p>
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326150303679-173787708.png" alt="img"></p>
+<p><strong>命令：ssh-keygen -t rsa，一路回车就行，如果需要passphrase密码，自行输入就行，一路回车passphrase密码为空</strong></p>
+<p><strong>此时在 ~/.ssh/ 目录下生成了公钥（id_rsa.pub）和私钥(id_rsa)</strong></p>
+<p><strong>-——————————————————————————————————————————————————————————————————————-</strong></p>
+<h3 id="step2："><a href="#step2：" class="headerlink" title="step2："></a>step2：</h3><p><strong>把机器A的公钥（id_rsa.pub）复制到机器B ~/.ssh/authorized_keys 文件里，两种常用方法</strong></p>
+<p><strong>方法1：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp ~/.ssh/id_rsa.pub username@host:/home/B/id_rsa.pub</span><br><span class="line"></span><br><span class="line">//此时scp需要输入 登录机器B username用户的密码</span><br><span class="line"></span><br><span class="line">//然后进入机器B内把 /home/B/id_rsa.pub 文件内容加写进 ~/.ssh/authorized_keys 文件：</span><br><span class="line"></span><br><span class="line">cat /home/B/id_rsa.pub /home/B/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>方法2：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">//在机器A中使用 ssh-copy-id 把公钥加写到机器B的 ~/.ssh/authorized_keys 文件</span><br><span class="line"></span><br><span class="line">ssh-copy-id username@host</span><br><span class="line"></span><br><span class="line">//执行后输入机器B username用户的密码，效果和方法1一样</span><br></pre></td></tr></table></figure>
+
+<h3 id="step3："><a href="#step3：" class="headerlink" title="step3："></a>step3：</h3><p><strong>修改机器B ~/.ssh/authorized_keys 文件的权限：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>此时如果机器B没有~/.ssh 目录需要手动创建</strong></p>
+<p><strong>-——————————————————————————————————————————————————————————————————————-</strong></p>
+<h3 id="step4："><a href="#step4：" class="headerlink" title="step4："></a>step4：</h3><p><strong>此时机器A可以进行免验证登录 机器B</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh username@host</span><br></pre></td></tr></table></figure>
+
+<p><strong>参阅网上很多方法后，发现步骤都差不多，但是却屡屡失败，设置完后仍然要输入密码，后面发现了是被登录机器的文件权限问题：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">//用户权限</span><br><span class="line"></span><br><span class="line">chmod 700 /home/username</span><br><span class="line"></span><br><span class="line">//.ssh文件夹权限</span><br><span class="line"></span><br><span class="line">chmod 700 ~/.ssh/</span><br><span class="line"></span><br><span class="line">// ~/.ssh/authorized_keys 文件权限</span><br><span class="line"></span><br><span class="line">chmod 600 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p><strong>还有可能这个文件内容被注释了（改成下图的状态）：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vi /etc/ssh/sshd_config </span><br></pre></td></tr></table></figure>
+
+<p><img src="https://img2018.cnblogs.com/blog/1227533/201903/1227533-20190326151902673-559452534.png" alt="img"></p>
+<p><strong>1 如果还是无法登陆，可能是Linux禁用了root账户ssh登陆，解决方法：</strong></p>
+<p><strong>编辑配置文件</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p><strong>2 修改  <code>PermitRootLogin</code> 后面的 no 为 yes，并且去掉前面的注释符，同时可以限制失败次数注意： 这个失败次数是对所有用户都起作用的。</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#LoginGraceTime 2m</span></span><br><span class="line">PermitRootLogin yes</span><br><span class="line"><span class="comment">#StrictModes yes</span></span><br><span class="line">MaxAuthTries 3</span><br><span class="line"><span class="comment">#MaxSessions 10</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3 重启 sshd 服务：</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl restart sshd.service</span><br></pre></td></tr></table></figure>
+
+]]></content>
       <categories>
         <category>wsl2</category>
         <category>ubuntu</category>
@@ -116,92 +161,6 @@
         <tag>ubuntu</tag>
         <tag>TLS</tag>
         <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Swag及其使用</title>
-    <url>/2022/01/18/swag/</url>
-    <content><![CDATA[<p>下面以gin-swagger为例，说明swaggo的用法。</p>
-<p>安装swag命令行<br>要使用swaggo，首先要下载一个swag命令行。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/swaggo/swag/cmd/swag</span><br></pre></td></tr></table></figure>
-
-<h4 id="下面是设置环境变量"><a href="#下面是设置环境变量" class="headerlink" title="下面是设置环境变量"></a>下面是设置环境变量</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">打开系统的环境变量设置找到系统变量</span><br><span class="line">发现在$ GOPATH / bin /下会看到多了一个swag。把$ GOPATH / bin /加到PATH后，就可以在任意目录下直接用swag命令行了。否则仅能在swag.exe所在目录下才能使用swag命令。环境变量的作用相当于一个导向作用。</span><br></pre></td></tr></table></figure>
-
-
-
-<p>在包含main.go的Go工程的根目录下执行swag init，swag会检索当前工程里的swag注解（类似上述Java中的注解），生成docs.go以及swagger.json/yaml。</p>
-<p>获取gin专用的gin-swagger<br>里面包含了一个示例代码。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger</span><br><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger/swaggerFiles</span><br></pre></td></tr></table></figure>
-
-
-<p>编写gin-swagger需要的注释<br>接下来就是编写注释了。注释分为两部分，一是整体应用的说明，二是具体api的说明。</p>
-<p>整体应用的说明<br>在主入口main.go中增加：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span> <span class="comment">// gin-swagger middleware</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span> <span class="comment">// swagger embed files</span></span><br></pre></td></tr></table></figure>
-
-
-<p>以及针对该应用程序的api说明。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span><span class="string">`)</span></span><br></pre></td></tr></table></figure>
-
-<pre><code>_ &quot;github.com/swaggo/gin-swagger/example/docs&quot;
-</code></pre>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @title Swagger Example API</span></span><br><span class="line"><span class="comment">// @version 0.0.1</span></span><br><span class="line"><span class="comment">// @description  This is a sample server Petstore server.</span></span><br><span class="line"><span class="comment">// @BasePath /api/v1/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := gin.New()</span><br><span class="line">	r.GET(<span class="string">&quot;/swagger/*any&quot;</span>, ginSwagger.WrapHandler(swaggerFiles.Handler))</span><br><span class="line">	r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<p>请注意@Router的路径。swagger注释中说明的@Router是在@BasePath下的相对路径，并不为绝对路径。</p>
-<p>具体api的说明</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// @Summary Add a new pet to the store</span></span><br><span class="line"><span class="comment">// @Description get string by ID</span></span><br><span class="line"><span class="comment">// @Accept  json</span></span><br><span class="line"><span class="comment">// @Produce  json</span></span><br><span class="line"><span class="comment">// @Param   some_id     path    int     true        &quot;Some ID&quot;</span></span><br><span class="line"><span class="comment">// @Success 200 &#123;string&#125; string	&quot;ok&quot;</span></span><br><span class="line"><span class="comment">// @Failure 400 &#123;object&#125; web.APIError &quot;We need ID!!&quot;</span></span><br><span class="line"><span class="comment">// @Failure 404 &#123;object&#125; web.APIError &quot;Can not find ID&quot;</span></span><br><span class="line"><span class="comment">// @Router /testapi/get-string-by-int/&#123;some_id&#125; [get]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStringByInt</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	err := web.APIError&#123;&#125;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<p>说明下几个参数。</p>
-<p>如果不需要参数（例如，获取所有类型的，由url就齐活了），则不需要加@Param。参数可以是int或字符串类型。这里的定义会影响swagger ui发送的请求，如果定义错了会导致发送请求的数据不对，例如对数字进行了转义。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @Param group body model.SwagGroupAdd true &quot;Add group&quot;</span></span><br><span class="line"><span class="comment">// @Param name path string true &quot;Group Name&quot;</span></span><br><span class="line"><span class="comment">// @Param role query int true &quot;Role ID&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>@Success和@Failure定义了返回值，类型可以是字符串，对象，数组。按照一般的restful定义，这三个类型足够表达返回值了。</p>
-<p>GET /collection：返回资源对象的列表（数组）<br>GET /collection/resource：返回单个资源对象<br>POST /collection：返回新生成的资源对象<br>PUT /collection/resource：返回完整的资源对象<br>PATCH /collection/resource：返回完整的资源对象<br>DELETE /collection/resource：返回一个空文档<br>不过有些不太标准的restful实践会在上述返回之上再包装一个代码/消息/正文，所以对swaggo来说会造成一些新的负担，因为必须为这些返回类型单独加对应的类型。这项。</p>
-<p>swag初始化<br>在项目根目录里执行swag init，生成docs/docs.go；再执行go run main.go，访问<a href="http://localhost:8080/swagger/index.html%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%84%89%E5%BF%AB%E7%9A%84%E4%BD%BF%E7%94%A8swagger">http://localhost:8080/swagger/index.html，就可以愉快的使用swagger</a> ui了。</p>
-<h4 id="以下是可能出现的问题"><a href="#以下是可能出现的问题" class="headerlink" title="以下是可能出现的问题"></a>以下是可能出现的问题</h4><ul>
-<li><p><strong>swagger页面出现加载错误</strong></p>
-<h1 id="mitting-host-returns-Internal-Server-Error-500-1019"><a href="#mitting-host-returns-Internal-Server-Error-500-1019" class="headerlink" title="mitting host returns Internal Server Error (500) #1019"></a>mitting host returns Internal Server Error (500) #1019</h1><h4 id="akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment"><a href="#akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment" class="headerlink" title="akshay196 opened this issue on 7 Oct 2021 · 1 comment"></a><strong><a href="https://github.com/akshay196">akshay196</a> opened this issue on 7 Oct 2021 · 1 comment</strong></h4><p><strong>Describe the bug</strong> </p>
-<p>[<img src="https://user-images.githubusercontent.com/16691314/136343497-6db89882-72cb-4434-bef2-609954622492.png" alt="Screenshot from 2021-10-07 13-26-58"></p>
-</li>
-</ul>
-<h3 id="问题原因以及解决方案"><a href="#问题原因以及解决方案" class="headerlink" title="问题原因以及解决方案"></a>问题原因以及解决方案</h3><h5 id="没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”"><a href="#没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”" class="headerlink" title="没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”"></a>没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”</h5>]]></content>
-      <categories>
-        <category>go</category>
-        <category>框架工具</category>
-      </categories>
-      <tags>
-        <tag>Swaggo</tag>
-        <tag>Swag</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>gorm中的注意点</title>
-    <url>/2022/01/20/order/</url>
-    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>go</category>
-        <category>gorm</category>
-      </categories>
-      <tags>
-        <tag>gorm</tag>
-        <tag>go</tag>
       </tags>
   </entry>
   <entry>
@@ -262,6 +221,92 @@
       <tags>
         <tag>go</tag>
         <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>gorm中的注意点</title>
+    <url>/2022/01/20/order/</url>
+    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>go</category>
+        <category>gorm</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gorm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Swag及其使用</title>
+    <url>/2022/01/18/swag/</url>
+    <content><![CDATA[<p>下面以gin-swagger为例，说明swaggo的用法。</p>
+<p>安装swag命令行<br>要使用swaggo，首先要下载一个swag命令行。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">go</span> get github.com/swaggo/swag/cmd/swag</span><br></pre></td></tr></table></figure>
+
+<h4 id="下面是设置环境变量"><a href="#下面是设置环境变量" class="headerlink" title="下面是设置环境变量"></a>下面是设置环境变量</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">打开系统的环境变量设置找到系统变量</span><br><span class="line">发现在$ GOPATH / bin /下会看到多了一个swag。把$ GOPATH / bin /加到PATH后，就可以在任意目录下直接用swag命令行了。否则仅能在swag.exe所在目录下才能使用swag命令。环境变量的作用相当于一个导向作用。</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在包含main.go的Go工程的根目录下执行swag init，swag会检索当前工程里的swag注解（类似上述Java中的注解），生成docs.go以及swagger.json/yaml。</p>
+<p>获取gin专用的gin-swagger<br>里面包含了一个示例代码。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger</span><br><span class="line">$ <span class="keyword">go</span> get -u github.com/swaggo/gin-swagger/swaggerFiles</span><br></pre></td></tr></table></figure>
+
+
+<p>编写gin-swagger需要的注释<br>接下来就是编写注释了。注释分为两部分，一是整体应用的说明，二是具体api的说明。</p>
+<p>整体应用的说明<br>在主入口main.go中增加：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span> <span class="comment">// gin-swagger middleware</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span> <span class="comment">// swagger embed files</span></span><br></pre></td></tr></table></figure>
+
+
+<p>以及针对该应用程序的api说明。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/swaggo/gin-swagger&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/swaggo/gin-swagger/swaggerFiles&quot;</span><span class="string">`)</span></span><br></pre></td></tr></table></figure>
+
+<pre><code>_ &quot;github.com/swaggo/gin-swagger/example/docs&quot;
+</code></pre>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @title Swagger Example API</span></span><br><span class="line"><span class="comment">// @version 0.0.1</span></span><br><span class="line"><span class="comment">// @description  This is a sample server Petstore server.</span></span><br><span class="line"><span class="comment">// @BasePath /api/v1/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	r := gin.New()</span><br><span class="line">	r.GET(<span class="string">&quot;/swagger/*any&quot;</span>, ginSwagger.WrapHandler(swaggerFiles.Handler))</span><br><span class="line">	r.Run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>请注意@Router的路径。swagger注释中说明的@Router是在@BasePath下的相对路径，并不为绝对路径。</p>
+<p>具体api的说明</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// @Summary Add a new pet to the store</span></span><br><span class="line"><span class="comment">// @Description get string by ID</span></span><br><span class="line"><span class="comment">// @Accept  json</span></span><br><span class="line"><span class="comment">// @Produce  json</span></span><br><span class="line"><span class="comment">// @Param   some_id     path    int     true        &quot;Some ID&quot;</span></span><br><span class="line"><span class="comment">// @Success 200 &#123;string&#125; string	&quot;ok&quot;</span></span><br><span class="line"><span class="comment">// @Failure 400 &#123;object&#125; web.APIError &quot;We need ID!!&quot;</span></span><br><span class="line"><span class="comment">// @Failure 404 &#123;object&#125; web.APIError &quot;Can not find ID&quot;</span></span><br><span class="line"><span class="comment">// @Router /testapi/get-string-by-int/&#123;some_id&#125; [get]</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetStringByInt</span><span class="params">(c *gin.Context)</span></span> &#123;</span><br><span class="line">	err := web.APIError&#123;&#125;</span><br><span class="line">	fmt.Println(err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>说明下几个参数。</p>
+<p>如果不需要参数（例如，获取所有类型的，由url就齐活了），则不需要加@Param。参数可以是int或字符串类型。这里的定义会影响swagger ui发送的请求，如果定义错了会导致发送请求的数据不对，例如对数字进行了转义。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">// @Param group body model.SwagGroupAdd true &quot;Add group&quot;</span></span><br><span class="line"><span class="comment">// @Param name path string true &quot;Group Name&quot;</span></span><br><span class="line"><span class="comment">// @Param role query int true &quot;Role ID&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>@Success和@Failure定义了返回值，类型可以是字符串，对象，数组。按照一般的restful定义，这三个类型足够表达返回值了。</p>
+<p>GET /collection：返回资源对象的列表（数组）<br>GET /collection/resource：返回单个资源对象<br>POST /collection：返回新生成的资源对象<br>PUT /collection/resource：返回完整的资源对象<br>PATCH /collection/resource：返回完整的资源对象<br>DELETE /collection/resource：返回一个空文档<br>不过有些不太标准的restful实践会在上述返回之上再包装一个代码/消息/正文，所以对swaggo来说会造成一些新的负担，因为必须为这些返回类型单独加对应的类型。这项。</p>
+<p>swag初始化<br>在项目根目录里执行swag init，生成docs/docs.go；再执行go run main.go，访问<a href="http://localhost:8080/swagger/index.html%EF%BC%8C%E5%B0%B1%E5%8F%AF%E4%BB%A5%E6%84%89%E5%BF%AB%E7%9A%84%E4%BD%BF%E7%94%A8swagger">http://localhost:8080/swagger/index.html，就可以愉快的使用swagger</a> ui了。</p>
+<h4 id="以下是可能出现的问题"><a href="#以下是可能出现的问题" class="headerlink" title="以下是可能出现的问题"></a>以下是可能出现的问题</h4><ul>
+<li><p><strong>swagger页面出现加载错误</strong></p>
+<h1 id="mitting-host-returns-Internal-Server-Error-500-1019"><a href="#mitting-host-returns-Internal-Server-Error-500-1019" class="headerlink" title="mitting host returns Internal Server Error (500) #1019"></a>mitting host returns Internal Server Error (500) #1019</h1><h4 id="akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment"><a href="#akshay196-opened-this-issue-on-7-Oct-2021-·-1-comment" class="headerlink" title="akshay196 opened this issue on 7 Oct 2021 · 1 comment"></a><strong><a href="https://github.com/akshay196">akshay196</a> opened this issue on 7 Oct 2021 · 1 comment</strong></h4><p><strong>Describe the bug</strong> </p>
+<p>[<img src="https://user-images.githubusercontent.com/16691314/136343497-6db89882-72cb-4434-bef2-609954622492.png" alt="Screenshot from 2021-10-07 13-26-58"></p>
+</li>
+</ul>
+<h3 id="问题原因以及解决方案"><a href="#问题原因以及解决方案" class="headerlink" title="问题原因以及解决方案"></a>问题原因以及解决方案</h3><h5 id="没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”"><a href="#没有import-之前swag-init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”-”" class="headerlink" title="没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”"></a>没有import 之前swag init自动生成的”docs“包，请自行import。若因为docs包导入却未使用的原因致使go编译器报错，自行在包前加上匿名字段”_”</h5>]]></content>
+      <categories>
+        <category>go</category>
+        <category>框架工具</category>
+      </categories>
+      <tags>
+        <tag>Swaggo</tag>
+        <tag>Swag</tag>
       </tags>
   </entry>
   <entry>
