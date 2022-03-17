@@ -224,34 +224,6 @@
       </tags>
   </entry>
   <entry>
-    <title>gorm中的注意点</title>
-    <url>/2022/01/20/order/</url>
-    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
-
-<p>sql:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>go</category>
-        <category>gorm</category>
-      </categories>
-      <tags>
-        <tag>go</tag>
-        <tag>gorm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Swag及其使用</title>
     <url>/2022/01/18/swag/</url>
     <content><![CDATA[<p>下面以gin-swagger为例，说明swaggo的用法。</p>
@@ -310,6 +282,34 @@
       </tags>
   </entry>
   <entry>
+    <title>gorm中的注意点</title>
+    <url>/2022/01/20/order/</url>
+    <content><![CDATA[<h1 id="1-gorm中的排序踩坑"><a href="#1-gorm中的排序踩坑" class="headerlink" title="1.gorm中的排序踩坑"></a>1.gorm中的排序踩坑</h1><h3 id="如查询”按照created-at升序第一个创建的User“"><a href="#如查询”按照created-at升序第一个创建的User“" class="headerlink" title="如查询”按照created_at升序第一个创建的User“"></a>如查询”按照<code>created_at</code>升序第一个创建的User“</h3><h3 id="正确的写法："><a href="#正确的写法：" class="headerlink" title="正确的写法："></a>正确的写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).Limit(<span class="number">1</span>).Find(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法："><a href="#错误写法：" class="headerlink" title="错误写法："></a>错误写法：</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at ASC&quot;</span>).First(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>这样写会自动加上主键的排序，生成的sql，虽然说结果应该都没什么差别，但是和预期的sql并不一样：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">ASC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">ASC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="错误写法：-1"><a href="#错误写法：-1" class="headerlink" title="错误写法："></a>错误写法：</h3><p>这样写，直接和想要的sql意图相反，变成”最后一个创建的User“，且自动加上了主键的排序</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">db.Model(&amp;models.User&#123;&#125;).Order(<span class="string">&quot;created_at DESC&quot;</span>).Last(&amp;s)</span><br></pre></td></tr></table></figure>
+
+<p>sql:</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;users&quot; <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at <span class="keyword">DESC</span>, &quot;users&quot;.&quot;id&quot; <span class="keyword">DESC</span> LIMIT <span class="number">1</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>go</category>
+        <category>gorm</category>
+      </categories>
+      <tags>
+        <tag>go</tag>
+        <tag>gorm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>GoWeb开发中token及其使用解析</title>
     <url>/2022/01/18/token/</url>
     <content><![CDATA[<h1 id="生成解析token"><a href="#生成解析token" class="headerlink" title="生成解析token"></a>生成解析token</h1><p>如今有很多将身份验证内置到API中的方法 -JSON Web令牌只是其中之一。JSON Web令牌（JWT）作为令牌系统而不是在每次请求时都发送用户名和密码，因此比其他方法（如基本身份验证）具有固有的优势。要了解更多信息，请直接进入jwt.io上的介绍，然后再直接学习。</p>
@@ -329,6 +329,31 @@
         <tag>token</tag>
         <tag>JWT</tag>
         <tag>gin</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>yum</title>
+    <url>/2022/03/17/yum/</url>
+    <content><![CDATA[<h1 id="解决yum安装软件报错的方法"><a href="#解决yum安装软件报错的方法" class="headerlink" title="解决yum安装软件报错的方法"></a>解决yum安装软件报错的方法</h1><h2 id="报错如下"><a href="#报错如下" class="headerlink" title="报错如下"></a>报错如下</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Failed to download metadata <span class="keyword">for</span> repo ‘AppStream’ [CentOS]</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong>Step 1:</strong> Go to the <code>/etc/yum.repos.d/</code> directory.</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@autocontroller ~]# cd /etc/yum.repos.d/</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 2:</strong> Run the below commands</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@autocontroller ~]# sed -i &#x27;s/mirrorlist/#mirrorlist/g&#x27; /etc/yum.repos.d/CentOS-*</span><br><span class="line">[root@autocontroller ~]# sed -i &#x27;s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g&#x27; /etc/yum.repos.d/CentOS-*</span><br></pre></td></tr></table></figure>
+
+<p><strong>Step 3:</strong> Now run the yum update</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">[root@autocontroller ~]# yum update -y</span><br></pre></td></tr></table></figure>
+
+<p>That’s it!</p>
+]]></content>
+      <categories>
+        <category>yum</category>
+        <category>CentOs</category>
+      </categories>
+      <tags>
+        <tag>yum</tag>
+        <tag>CentOS</tag>
       </tags>
   </entry>
   <entry>

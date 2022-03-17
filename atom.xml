@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-01-25T13:43:03.289Z</updated>
+  <updated>2022-03-17T12:16:01.936Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>yum</title>
+    <link href="http://example.com/2022/03/17/yum/"/>
+    <id>http://example.com/2022/03/17/yum/</id>
+    <published>2022-03-17T12:09:07.000Z</published>
+    <updated>2022-03-17T12:16:01.936Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="解决yum安装软件报错的方法"><a href="#解决yum安装软件报错的方法" class="headerlink" title="解决yum安装软件报错的方法"></a>解决yum安装软件报错的方法</h1><h2 id="报错如下"><a href="#报错如下" class="headerlink" title="报错如下"></a>报错如下</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Failed to download metadata <span class="keyword">for</span> repo ‘AppStream’ [CentOS]</span><br></pre></td></tr></table></figure><h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><p><strong>Step 1:</strong> Go to the <code>/etc/yum.repos.d/</code> directory.</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@autocontroller ~]# cd /etc/yum.repos.d/</span><br></pre></td></tr></table></figure><p><strong>Step 2:</strong> Run the below commands</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@autocontroller ~]# sed -i &#x27;s/mirrorlist/#mirrorlist/g&#x27; /etc/yum.repos.d/CentOS-*</span><br><span class="line">[root@autocontroller ~]# sed -i &#x27;s|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g&#x27; /etc/yum.repos.d/CentOS-*</span><br></pre></td></tr></table></figure><p><strong>Step 3:</strong> Now run the yum update</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@autocontroller ~]# yum update -y</span><br></pre></td></tr></table></figure><p>That’s it!</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;解决yum安装软件报错的方法&quot;&gt;&lt;a href=&quot;#解决yum安装软件报错的方法&quot; class=&quot;headerlink&quot; title=&quot;解决yum安装软件报错的方法&quot;&gt;&lt;/a&gt;解决yum安装软件报错的方法&lt;/h1&gt;&lt;h2 id=&quot;报错如下&quot;&gt;&lt;a href=&quot;#报</summary>
+      
+    
+    
+    
+    <category term="yum" scheme="http://example.com/categories/yum/"/>
+    
+    <category term="CentOs" scheme="http://example.com/categories/yum/CentOs/"/>
+    
+    
+    <category term="yum" scheme="http://example.com/tags/yum/"/>
+    
+    <category term="CentOS" scheme="http://example.com/tags/CentOS/"/>
+    
+  </entry>
   
   <entry>
     <title>WSL2-Ubuntu-20.04-LTS出现的一些使用问题</title>
